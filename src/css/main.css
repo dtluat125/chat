@@ -33,14 +33,19 @@
     src: url('../fonts/montserrat/Montserrat-Regular.ttf'); 
   }
 
+  .App{
+    min-height: 100vh;
+  }
 
   body{
-    min-height: 100vh;
   }
   #root{
     height: 100%;
   }
   .work-space-body{
-   
+    height:inherit;
+    display: flex;
   }
+
+
   
