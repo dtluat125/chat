@@ -1,16 +1,36 @@
 import React from 'react'
-import { Dropdown } from 'react-bootstrap'
-import SubjectIcon from '@material-ui/icons/Subject';
+import {useDispatch, useSelector} from "react-redux"
+import { enterRoom, selectRoomId } from '../../features/appSlice'
 
-function SidebarOption({icon, title, isDropdown}) {
+// import {useCollection} from 'react-firebase-hooks'
+function SidebarOption({icon, title, isChannel, id}) {
+    console.log(id);
+    const dispatch = useDispatch();
+    const seeAllDm = () => {}
+    const selectChannel = () => {
+        if(id){
+           dispatch(
+               enterRoom({
+                   roomId: id
+               })
+           )
+        }
+    }
+    const roomId = useSelector(selectRoomId)
     return(
-        (<div className="sidebar__option-container" role="button">
+        (<div className={roomId === id?"sidebar__option-container active":"sidebar__option-container"} tabIndex="1" role="button" onClick={id?selectChannel:seeAllDm}>
+            {icon&&
             <div className="sidebar__icon">
                 {icon}
-            </div>
+            </div>}
+            {icon?
             <div className="sidebar__option__title">
                 {title}
-            </div>
+            </div> : <div className="sidebar__option__channel">
+                <span>#</span> {title}
+            </div>            
+        } 
+        
             
         </div>)
     )
@@ -18,15 +38,3 @@ function SidebarOption({icon, title, isDropdown}) {
 
 export default SidebarOption
 
-function DropdownItem({icon, title}){
-    return(
-        <div className="item-container">
-            <div className="item-icon">
-                {icon}
-            </div>
-            <div className="item-title">
-                {title}
-            </div>
-        </div>
-    )
-}

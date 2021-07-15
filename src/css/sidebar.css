@@ -20,8 +20,8 @@
     background: #3F0E40;
     padding: 0;
     max-height: 100vh;
-    position: fixed;
     height: 100%;
+    flex: 0.3
 }
 
 .side-bar__header{
@@ -58,7 +58,7 @@
     position: relative;
     z-index: 1;
     font-size: 18px;
-    line-height: 1.33334;
+    line-height: 1.33334!important;
 }
 
 .side-bar__header__button:hover{
@@ -74,7 +74,7 @@
     align-items: center;
     padding-left: 4px;
     margin-left: -4px;
-    
+    line-height: 1.33334!important;
 }
 
 .send-button{
@@ -89,7 +89,16 @@
     width: 34px;
     top: 8px;
     z-index: 3;
+    border-radius: 50%;
+    background: #FFFFFF!important;
+    transition: all 0.3s ease;
 }
+
+.send-button .MuiSvgIcon-root{
+    color: #350d36;
+    margin-right: 0;
+}
+
 
 .side-bar-container .collapse-container{
     width: 100%;
@@ -105,15 +114,18 @@
     display: flex;
     align-items: center;
     color: #FFFFFF;
-    font-size: 14px;
+    font-size: 15px;
     color: rgb(188,171,188);
     padding: 5px 10px 5px 5px;
+    position: relative;
 }
 
 .side-bar-container .sidebar__option-container:hover{
     background: #350d36 !important;
 }
-
+.side-bar-container .sidebar__option-container.active{
+    background-color: #350d36 !important;
+}
 .side-bar-container .dropdown-toggle::after{
     display: none!important;
 }
@@ -131,9 +143,9 @@
 }
 
 .side-bar-container .MuiSvgIcon-root{
-    font-size: 1rem!important;
-    margin-right: 10px;
+    font-size: small;
 }
+
 
 .side-bar-container .dropdown > button{
     padding: 0;
@@ -143,5 +155,61 @@
 .collapse-container{
     display: flex;
     flex-direction: column;
+    position: relative;
+}
+
+.collapse-container .collapse,.collapse-container .collapsing{
+    width: 100%;
+
+}
+
+.side-bar-container > hr{
+    margin: 0;
+    color: rgb(82,38,83);
+}
+
+
+.collapse-container .add-channel-button{
+    position: absolute;
+    right: 15px;
+    top: 7px;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+}
+
+.collapse-container .add-channel-button:hover{
+    background-color:rgb(82,38,83) ;
+    border-radius: 5px;
+}
+
+.sidebar__option-container .sidebar__icon{
+    padding: 0 5px 0 5px;
+
+}
+
+button.send-button:active{
+    transform: scale(0.8)!important;
+}
+
+
+.add-channel-button .MuiSvgIcon-root{
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.item-icon .MuiSvgIcon-root{
+    font-size: 1.3rem;
+}
+
+.item-icon{
+    transition: all 0.3s ease;
+}
+
+.sidebar__option__channel span{
+    margin-left: 5px;
 }
 

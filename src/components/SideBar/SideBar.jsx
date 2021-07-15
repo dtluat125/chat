@@ -8,13 +8,25 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ForumIcon from '@material-ui/icons/Forum';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import AddIcon from '@material-ui/icons/Add';
+import { db } from '../../firebase';
+import { useCollection } from 'react-firebase-hooks/firestore';
 function SideBar() {
+    const [channels, loading, error] = useCollection(db.collection("room"));
+    const channelList = [];
+    channels?.docs.map(doc =>channelList.push(<SidebarOption
+        title = {doc.data().name}
+        key = {doc.id}
+        id = {doc.id}
+    />))
+
     return (
         <div className="side-bar-container">
             <SidebarHeader/>
             <SidebarCollapse options={[
                 <SidebarOption
-                title="All Unreads" 
+                title="All Unreads"
                 icon={<ForumIcon/>}
                 isDropdown={true}
                 />,
@@ -23,18 +35,22 @@ function SideBar() {
                 icon={<AlternateEmailIcon/>}
                 isDropdown={true}
                 />
-                
             ]}
             id = {"browseslack"}
             title="Browse Slack"
             icon = {<MoreVertIcon/>}
             />
+            <hr />
             <SidebarCollapse
             title="Channels"
-            icon = {<ArrowDropDownIcon/>
+            icon = {<ArrowRightIcon/>
             }
             id = {"channels"}
+            addIcon={<AddIcon/>}
+            options={channelList}
             />
+            
+            
         </div>
     )
 }
@@ -78,18 +94,42 @@ function SidebarHeader() {
 }
 
 function SidebarCollapse(props){
+    let isShowing = false;
+    const addChannel = () => {
+        
+        const channelName = prompt('Please Enter the channel name');
+        if(channelName){
+            db.collection('room').add({
+                name: channelName,
+
+            })
+        }
+
+    }
+    const showHandler = () => {
+        isShowing = !isShowing
+        console.log(isShowing)
+    }
     return(
         <div className="collapse-container">
             <div className="sidebar__option-container"
             type="button" data-bs-toggle="collapse" data-bs-target={`#${props.id}`} aria-expanded="false" aria-controls={`${props.id}`}
+            onClick={showHandler}
             >
-                <div className="item-icon">
+                <div className={isShowing? props.title==="Channels"?"item-icon arrow-rotate":"item-icon":"item-icon"}>
                     {props.icon}
                 </div>
                 <div className="item-title">
                     {props.title}
                 </div>
+                
             </div>
+            {
+                    props.addIcon && <div className= "add-channel-button" role="button" onClick={addChannel}>
+                        {props.addIcon}
+                    </div>
+        }
+        
             <div className="collapse" id={`${props.id}`}>
                 {props.options && props.options.map((option) =>{return option})}
 

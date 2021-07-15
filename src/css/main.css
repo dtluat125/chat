@@ -43,8 +43,10 @@
     height: 100%;
   }
   .work-space-body{
-    height:inherit;
+    position: fixed;
     display: flex;
+    height: 100%;
+    width: 100%;
   }
 
 
