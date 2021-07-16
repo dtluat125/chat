@@ -52,12 +52,12 @@
 }
 
 .header__avatar{
-    height: 28px;
-    width: 28px;
+ 
 }
 
-.header__avatar img{
-    width: 100%;
+.header__avatar .user-avatar img{
+    height: 28px;
+    width: 28px;
 }
 
 .header__right{
@@ -89,4 +89,53 @@
 
 .header-container .dropdown-item{
     padding-left: 24px!important;
+}
+
+.main-menu__user{
+    display: flex!important;
+    pointer-events: none;
+    cursor: unset;
+}
+
+.main-menu__user__avatar{
+    height: 36px;
+    width: 36px;
+    border-radius: 4px;
+}
+
+.main-menu__user__avatar>img{
+    width: 100%;  
+    border-radius: 4px; 
+}
+
+.dropdown-menu{
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    box-shadow: 0 0 0 1px var(--saf-0),0 4px 12px 0 rgba(0,0,0,.12);
+    background-color: rgba(var(--sk_foreground_min_solid,248,248,248),1)!important;
+    border-radius: 6px;
+    user-select: none;
+    width: 300px;
+    max-width: 360px;
+    min-width: 200px;
+    z-index: 1012;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    padding: .1px 0;
+}
+
+.main-menu__user__details{
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 36px!important;
+}
+
+.main-menu__user__status .MuiSvgIcon-root{
+    color: green;
+
+}
+
+.main-menu__user__name {
+    font-weight: 700;
 }

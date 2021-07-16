@@ -213,3 +213,6 @@ button.send-button:active{
     margin-left: 5px;
 }
 
+.collapse-container{
+    border-bottom: 1px solid rgb(82,38,83);
+}

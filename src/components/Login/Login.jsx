@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-
+import {Button} from "@material-ui/core"
+import { auth, provider } from '../../firebase';
 function LogIn(props){
     const [isSignIn, setIsSignIn] = useState(true);
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
+    const [email, setEmail] = useState('');
 
     function onSignIn(){
         setIsSignIn(false)
@@ -21,14 +23,44 @@ function LogIn(props){
         setConfirm(e.target.value)
     }
 
-    if(isSignIn) return <SignIn onClick = {onSignIn}/>
+    const signIn = (e) => {
+        e.preventDefault();
+        auth.signInWithPopup(provider).catch((error) => 
+        alert(error.message));
+    }
+    const handleRegister = (e) => {
+        e.preventDefault();
+        password !== confirm ? alert("You type different confirm password!"):
+        auth.createUserWithEmailAndPassword(email, password)
+    }
+
+    const handleSignIn = (e) => {
+        e.preventDefault();
+        auth.signInWithEmailAndPassword(email, password)
+    }
+
+    const onEmailChange = (e) =>{
+        setEmail(e.target.value)
+    }
+    if(isSignIn) return <SignIn
+    onClick = {onSignIn} signIn = {signIn}
+    password = {password}
+    email = {email}
+    onPassWordChange = {onPassWordChange}
+    onEmailChange = {onEmailChange}
+    signInEmail = {handleSignIn}
+
+    />
 
     else return <Register onClick = {onRegister}
         password = {password}
         confirm ={confirm}
+        email = {email}
         onPassWordChange = {onPassWordChange}
         onConfirmChange = {onConfirmChange}
-        isConfirmed = {password === confirm}
+        onEmailChange = {onEmailChange}
+        register = {handleRegister}
+
 
     />
 
@@ -48,7 +80,7 @@ function SignIn(props){
 
 
     return(
-        <div className="login row">
+        <div className="login">
             <div className="col-md-6 img-bg-container">
 
             </div>
@@ -58,26 +90,29 @@ function SignIn(props){
                 <span className="form__title">
                     Login to continue
                 </span>
-                <form action="" method="post">
+                <form method="post">
                     <div className="form__input">
                         
                             
-                            <input name="form__email" type="text" className="input-area" required/>
+                            <input name="form__email" type="text" className="input-area" onChange={props.onEmailChange} value={props.email} required/>
                             <span className="label-span">Email</span>
                     
                     </div>
                     <div className="form__input">
                        
                             
-                            <input name="form__password" type="password" className="input-area"  required/>
+                            <input name="form__password" type="password" className="input-area" onChange={props.onPassWordChange} value={props.password}  required/>
                             <span className='label-span'>Password</span>
                       
                     </div>
 
-                    <button type="submit" className="form__button">Sign in</button>
+                    <button onClick={props.signInEmail} type="submit" className="form__button">Sign in</button>
                 </form>
                 <div className="change-form">
-                    <p>Or <span onClick={props.onClick}>register</span> if you don't have any account</p>
+                    
+                    <p><span onClick={props.onClick}>REGISTER</span> if you don't have any account</p>
+                    <p>Or  <Button onClick={props.signIn}>Sign in with Google</Button> </p>
+
                 </div>
             </div>
             
@@ -87,7 +122,7 @@ function SignIn(props){
 
 function Register(props){
     return(
-        <div className="login row">
+        <div className="login">
             <div className="col-md-6 img-bg-container">
 
             </div>
@@ -97,18 +132,18 @@ function Register(props){
                 <span className="form__title">
                     Register
                 </span>
-                <form action="" method="post">
+                <form method="post">
                     <div className="form__input">
                         
                             
-                            <input name="form__email" type="text" className="input-area" required/>
+                            <input name="form__email" type="text" className="input-area" value = {props.email} onChange={(e) => props.onEmailChange(e)} required/>
                             <span className="label-span">Email</span>
                     
                     </div>
                     <div className="form__input">
                        
                             
-                            <input name="form__password" type="password" className="input-area"  onChange={(e) => props.onPassWordChange(e)} required/>
+                            <input name="form__password" type="password" className="input-area" value = {props.password}  onChange={(e) => props.onPassWordChange(e)} required/>
                             <span className='label-span'>Password</span>
                       
                     </div>
@@ -116,12 +151,12 @@ function Register(props){
                     <div className="form__input">
                        
                             
-                            <input name="form__password" type="password" className="input-area" onChange={(e) => props.onConfirmChange(e)} required/>
+                            <input name="form__password" type="password" className="input-area" value = {props.confirm} onChange={(e) => props.onConfirmChange(e)} required/>
                             <span className='label-span'>Confirm Password</span>
                       
                     </div>
 
-                    <button type="submit" className="form__button">Sign in</button>
+                    <button type="submit" onClick = {props.register}  className="form__button">Sign in</button>
                 </form>
 
                 <div className="change-form">

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import "../../css/chat.css"
 import { selectRoomId } from '../../features/appSlice'
@@ -8,13 +8,18 @@ import ChatInput from './ChatInput'
 import Message from './Message';
 
 function Chat() {
+    const chatRef = useRef(null)
     const roomId = useSelector(selectRoomId);
     const [roomDetails] = useCollection(roomId&&db.collection("room").doc(roomId))
-    const [roomMessages] = useCollection(
+    const [roomMessages, loading] = useCollection(
         roomId&&
         db.collection("room").doc(roomId).collection('messages').orderBy("timestamp", "asc")
     )
-    console.log(roomId)
+    useEffect(() => {
+        chatRef?.current?.scrollIntoView({
+            behavior:"smooth"
+        });
+    }, [roomId, loading])
     return (
         <div className="chat-container">
             <div className="chat__header">
@@ -41,8 +46,12 @@ function Chat() {
                         )
                     })
                 }
+                <div className="chat-bottom" ref={chatRef}>
+
+                </div>
             </div>
             <ChatInput
+            chatRef = {chatRef}
             channelId = {roomId}
             channelName = {roomId&&roomDetails?.data().name}
 

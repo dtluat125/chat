@@ -5,9 +5,9 @@ function Message({user, userImage, message, timestamp}) {
         <div className = "message-container">
             <img src={userImage} alt="" />
             <div className="message__info">
-                <h4>
-                    {user} <span>{new Date(timestamp?.toDate()).toUTCString()}</span>
-                </h4>
+                <div className="status">
+                    <a href="">{user}</a> <span>{new Date(timestamp?.toDate()).toUTCString()}</span>
+                </div>
                 <p className="message">
                     {message}
                 </p>

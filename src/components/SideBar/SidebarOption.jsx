@@ -4,7 +4,6 @@ import { enterRoom, selectRoomId } from '../../features/appSlice'
 
 // import {useCollection} from 'react-firebase-hooks'
 function SidebarOption({icon, title, isChannel, id}) {
-    console.log(id);
     const dispatch = useDispatch();
     const seeAllDm = () => {}
     const selectChannel = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { db } from '../../firebase';
 import firebase from 'firebase';
-function ChatInput({channelName, channelId}) {
+function ChatInput({channelName, channelId, chatRef}) {
     const [input, setInput] = useState("");
     const sendMessage = (e) => {
         e.preventDefault();
@@ -14,6 +14,9 @@ function ChatInput({channelName, channelId}) {
         });
         setInput("")
     }
+    chatRef?.current?.scrollIntoView({
+        behavior:"smooth"
+    });
 
     const inputChangeHandler = (e) => {
         setInput(e.target.value)

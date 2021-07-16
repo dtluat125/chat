@@ -4,7 +4,13 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import SearchIcon from '@material-ui/icons/Search';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { Dropdown } from 'react-bootstrap';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { auth } from '../../firebase';
 function Header() {
+    const logOut=() => {
+        auth.signOut().then(() => {
+        }).catch(error => alert(error.message))
+    }
     return (
         <div className="header-container">
             {/* Header Left */}
@@ -44,9 +50,33 @@ function Header() {
                     </Dropdown.Menu>
                 </Dropdown>
                 <div className="header__avatar">
-                <span className="user-avatar">
-                    <img src="	https://ca.slack-edge.com/T027MTSUAJZ-U0283JDM2UR-94affb41c94e-72" alt="" />
-                </span>
+                
+                <Dropdown className="user-dropdown dropdown">
+                    <Dropdown.Toggle className="c-button-unstyled dropdown-toggle" id="historyDropdown" variant="success">
+                    <span className="user-avatar">
+                        <img src="	https://ca.slack-edge.com/T027MTSUAJZ-U0283JDM2UR-94affb41c94e-72" alt="" />
+                    </span>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className="dropdown-menu" aria-labelledby="historyDropdown">
+                    
+                        <div className="dropdown-item main-menu__user" >
+                            <div className="main-menu__user__avatar">
+                            <img src="https://ca.slack-edge.com/T027MTSUAJZ-U0283JDM2UR-94affb41c94e-72" alt="" />
+                            </div>
+                            <div className="main-menu__user__details">
+                                <div className="main-menu__user__name">
+                                    #Username
+                                </div>
+                                <span className="main-menu__user__status">
+                                    <FiberManualRecordIcon style={{fontSize: "small"}}/>
+                                    Active
+                                </span>
+                            </div>
+                        </div>
+                        <div className="dropdown-item" onClick={logOut} >Sign Out</div>
+                        <div className="dropdown-item" >Something else here</div>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
             </div>
 

@@ -10,6 +10,11 @@ input {
     border-radius: 5px;
 }
 
+.login{
+    display: flex;
+}
+
+
 .img-bg-container {
     background-image: url("https://colorlib.com/etc/lf/Login_v18/images/bg-01.jpg");
     background-repeat: no-repeat;
@@ -17,7 +22,10 @@ input {
     background-position: center;
     position: relative;
     z-index: 1;
+    height: 100vh;
 }
+
+
 
 .form-container {
     min-height: 100vh;
@@ -147,10 +155,16 @@ span.label-span {
         background-image: url("https://colorlib.com/etc/lf/Login_v18/images/bg-01.jpg");
         background-position: center;
         background-repeat: no-repeat;
-        background-size: auto;
+        background-size: cover;
+        width: 100%;
     }
 
     .form__input{
         background-color: white;
     }
+
+    .change-form > button{
+        background-color: #0a8d48!important;
+    }
 }
+    

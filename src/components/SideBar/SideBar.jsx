@@ -40,7 +40,7 @@ function SideBar() {
             title="Browse Slack"
             icon = {<MoreVertIcon/>}
             />
-            <hr />
+            
             <SidebarCollapse
             title="Channels"
             icon = {<ArrowRightIcon/>
@@ -108,7 +108,6 @@ function SidebarCollapse(props){
     }
     const showHandler = () => {
         isShowing = !isShowing
-        console.log(isShowing)
     }
     return(
         <div className="collapse-container">
