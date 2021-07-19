@@ -32,7 +32,7 @@
     font-family: Montserrat-Regular;
     src: url('../fonts/montserrat/Montserrat-Regular.ttf'); 
   }
-
+  @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
   .App{
     min-height: 100vh;
   }

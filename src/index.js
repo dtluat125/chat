@@ -5,9 +5,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { app } from './app/store'
 import { Provider } from 'react-redux';
+import EditProfile from './components/Edit Profile/EditProfile';
 
 ReactDOM.render(
   <React.StrictMode>
+    <EditProfile/>
     <Provider store={app}>
       <App />
     </Provider>

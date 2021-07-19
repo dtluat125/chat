@@ -7,8 +7,8 @@ import { Dropdown } from 'react-bootstrap';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { auth } from '../../firebase';
 function Header() {
-    const logOut=() => {
-        auth.signOut().then(() => {
+    const logOut= async() => {
+        await auth.signOut().then(() => {
         }).catch(error => alert(error.message))
     }
     return (
@@ -74,7 +74,9 @@ function Header() {
                             </div>
                         </div>
                         <div className="dropdown-item" onClick={logOut} >Sign Out</div>
-                        <div className="dropdown-item" >Something else here</div>
+                        <div className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editProfile">
+                            Edit Profile
+                        </div>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -84,5 +86,10 @@ function Header() {
         </div>
     )
 }
+
+
+
+
+
 
 export default Header

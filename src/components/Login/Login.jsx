@@ -1,11 +1,22 @@
 import React, { useState } from 'react'
 import {Button} from "@material-ui/core"
-import { auth, provider } from '../../firebase';
+import { auth, db, provider } from '../../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDispatch } from 'react-redux';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { saveUserInfo } from '../../features/appSlice';
 function LogIn(props){
+    
     const [isSignIn, setIsSignIn] = useState(true);
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
     const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
+    const [users, usersLoading] = useCollection(db.collection('users'));
+    const user = useAuthState(auth);
+
+    
+    
 
     function onSignIn(){
         setIsSignIn(false)
@@ -32,16 +43,40 @@ function LogIn(props){
         e.preventDefault();
         password !== confirm ? alert("You type different confirm password!"):
         auth.createUserWithEmailAndPassword(email, password)
+        
+        .catch(err => alert(err.message))
     }
 
     const handleSignIn = (e) => {
         e.preventDefault();
         auth.signInWithEmailAndPassword(email, password)
+        .then( (userCred) => {
+            const userInf={
+                displayName: userCred.user.displayName,
+                email: userCred.user.email,
+                emailVerified: userCred.user.emailVerified,
+                uid: userCred.user.uid,
+                photoURL: userCred.user.photoURL
+            }
+            dispatch(
+                saveUserInfo({
+                    user: userInf
+                })
+            ) 
+        })
+        .then(() => {
+
+        })
+        .catch(err => alert(err.message))
     }
 
     const onEmailChange = (e) =>{
         setEmail(e.target.value)
     }
+
+
+
+
     if(isSignIn) return <SignIn
     onClick = {onSignIn} signIn = {signIn}
     password = {password}
