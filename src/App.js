@@ -13,7 +13,8 @@ import { auth, db } from './firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useEffect, useState } from 'react';
 import Loading from './components/Loading';
-import EditProfile from './components/Edit Profile/EditProfile';
+import {useDispatch, useSelector} from "react-redux"
+import { docUserId, saveUserInfo } from './features/appSlice';
 
 function App() {
   const [user, userLoading] = useAuthState(auth)
@@ -28,28 +29,47 @@ function App() {
 
     }
   }
-  const addUser = (user) => {
-      var chosen = checkExist(user);
-      console.log(chosen);
-      if (chosen === undefined&&user&&!usersLoading){
-          console.log(user)
-          if(user){
-              users.add({
-                  displayName: user.displayName,
-                  email: user.email,
-                  emailVerified: user.emailVerified,
-                  uid: user.uid,
-                  photoURL: user.photoURL
+  let chosenUser = {};
+  const dispatch = useDispatch()
+
+  const addUser = async (userInf) => {
+      var chosen = checkExist(userInf);
+     
+      if (chosen === undefined&&userInf&&!usersLoading){
+                  chosenUser = await db.collection('users').add({
+                    displayName: userInf.displayName,
+                    email: userInf.email,
+                    emailVerified: userInf.emailVerified,
+                    uid: userInf.uid,
+                    photoURL: userInf.photoURL
                   })
-              }
+              
+              dispatch(docUserId(
+                {
+                  docUserId:
+                    chosenUser.id
+               
+                }
+              ))
+              
               console.log("Success")
       }
       
       else{
+              dispatch(docUserId(
+                {
+                  docUserId: 
+                   chosen?.id
+                  
+                }
+              ))
           console.log('not add')
           return;
       }
+
   }
+
+  
 
   useEffect(() => {
     addUser(user)
@@ -68,7 +88,7 @@ function App() {
           (!user) ? (<LogIn/>):
          (
          <>
-          <Header/>
+          <Header user = {user}/>
           <div className="work-space-body">
             <SideBar>
               <Switch>

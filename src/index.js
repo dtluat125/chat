@@ -3,15 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { app } from './app/store'
+import { app, persistor } from './app/store'
 import { Provider } from 'react-redux';
 import EditProfile from './components/Edit Profile/EditProfile';
+import { PersistGate } from 'redux-persist/integration/react';
 
 ReactDOM.render(
   <React.StrictMode>
-    <EditProfile/>
+    
     <Provider store={app}>
-      <App />
+      <PersistGate loading="null" persistor = {persistor}>
+        <EditProfile/>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

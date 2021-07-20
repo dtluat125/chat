@@ -49,7 +49,7 @@
     padding-left: 0;
 }
 
-.c-input-field label{
+.c-input-field label, .c-profile-photo-field label{
     line-height: 1.46666667;
     font-weight: 700;
 }
@@ -60,4 +60,39 @@
 
 .c-input-field .input-container{
     margin-bottom: 20px;
+}
+
+.photo-input{
+    display: flex;
+    flex-direction: column;
+}
+
+input[type='file'].photo-input{
+    opacity: 0;
+    
+}
+
+span.upload-button{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.c-modal__footer{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.c-button--medium{
+    font-size: 15px!important;
+    height: 36px !important;
+    min-width: 80px;
+    padding: 0 12px 1px !important;
+    font-weight: 700!important;
+    border: 1px solid rgb(190, 189, 189)!important;
+    border-radius: 5px;
 }

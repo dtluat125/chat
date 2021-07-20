@@ -5,12 +5,22 @@ import SearchIcon from '@material-ui/icons/Search';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import { Dropdown } from 'react-bootstrap';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { useSelector } from 'react-redux';
+import { selectDocId } from '../../features/appSlice';
+
+
 function Header() {
+    const docUserId = useSelector(selectDocId);
+    const [user , loading] = useCollection(db.collection('users').doc(docUserId))
     const logOut= async() => {
         await auth.signOut().then(() => {
         }).catch(error => alert(error.message))
     }
+
+    const displayName = user?.data().displayName;
+    const photoURL = user?.data().photoURL;
     return (
         <div className="header-container">
             {/* Header Left */}
@@ -54,18 +64,18 @@ function Header() {
                 <Dropdown className="user-dropdown dropdown">
                     <Dropdown.Toggle className="c-button-unstyled dropdown-toggle" id="historyDropdown" variant="success">
                     <span className="user-avatar">
-                        <img src="	https://ca.slack-edge.com/T027MTSUAJZ-U0283JDM2UR-94affb41c94e-72" alt="" />
+                        <img src={photoURL} alt="" />
                     </span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-menu" aria-labelledby="historyDropdown">
                     
                         <div className="dropdown-item main-menu__user" >
                             <div className="main-menu__user__avatar">
-                            <img src="https://ca.slack-edge.com/T027MTSUAJZ-U0283JDM2UR-94affb41c94e-72" alt="" />
+                            <img src={photoURL} alt="" />
                             </div>
                             <div className="main-menu__user__details">
                                 <div className="main-menu__user__name">
-                                    #Username
+                                    {displayName}
                                 </div>
                                 <span className="main-menu__user__status">
                                     <FiberManualRecordIcon style={{fontSize: "small"}}/>

@@ -16,7 +16,9 @@ function LogIn(props){
     const user = useAuthState(auth);
 
     
-    
+    const saveUser = (user) => {
+        localStorage.setItem("user", JSON.stringify(user))
+    }
 
     function onSignIn(){
         setIsSignIn(false)
@@ -42,8 +44,25 @@ function LogIn(props){
     const handleRegister = (e) => {
         e.preventDefault();
         password !== confirm ? alert("You type different confirm password!"):
-        auth.createUserWithEmailAndPassword(email, password)
-        
+        auth.createUserWithEmailAndPassword(email, password).then(
+            (userCred) => {
+                const userInf={
+                    displayName: userCred.user.displayName,
+                    email: userCred.user.email,
+                    emailVerified: userCred.user.emailVerified,
+                    uid: userCred.user.uid,
+                    photoURL: userCred.user.photoURL
+                }
+    
+                // saveUser(userInf);
+    
+                dispatch(
+                    saveUserInfo({
+                        user: userInf
+                    })
+                ) 
+            }
+        )
         .catch(err => alert(err.message))
     }
 
@@ -58,6 +77,9 @@ function LogIn(props){
                 uid: userCred.user.uid,
                 photoURL: userCred.user.photoURL
             }
+
+            // saveUser(userInf);
+
             dispatch(
                 saveUserInfo({
                     user: userInf
