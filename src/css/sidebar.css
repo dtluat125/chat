@@ -209,10 +209,19 @@ button.send-button:active{
     transition: all 0.3s ease;
 }
 
+.sidebar__option__channel{
+    padding-left: 20px;
+}
+
 .sidebar__option__channel span{
     margin-left: 5px;
 }
 
 .collapse-container{
     border-bottom: 1px solid rgb(82,38,83);
+}
+
+.sidebar__option__channel img{
+    width: 2rem!important;
+    border-radius: 5px;
 }

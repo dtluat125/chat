@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@800&display=swap');
 .loading-container{
-    width: 100vh;
     height: 100vh;
     display: flex;
     justify-content: center;

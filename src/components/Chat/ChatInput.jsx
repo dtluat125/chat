@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { db } from '../../firebase';
 import firebase from 'firebase';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../features/appSlice';
 function ChatInput({channelName, channelId, chatRef}) {
+    const user = useSelector(selectUser);
     const [input, setInput] = useState("");
     const sendMessage = (e) => {
         e.preventDefault();
@@ -9,8 +12,8 @@ function ChatInput({channelName, channelId, chatRef}) {
         db.collection("room").doc(channelId).collection("messages").add({
             message: input,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            user: "Luatdtrai",
-            userImage: 'https://yt3.ggpht.com/yti/APfAmoELaY-5d7PJVzysHz93xIWwDfkCzVPHdivIZGzm=s88-c-k-c0x00ffffff-no-rj-mo'
+            user: user.displayName,
+            userImage: user.photoURL
         });
         setInput("")
     }

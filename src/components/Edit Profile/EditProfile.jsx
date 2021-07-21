@@ -1,22 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { useDispatch, useSelector } from 'react-redux';
 import '../../css/editprofile.css'
+import { saveUserInfo, selectDocId, selectUser } from '../../features/appSlice';
+import { auth, db } from '../../firebase';
 import InputSection from './InputSection'
 function EditProfile() {
-    const [saveChange, setSaveChange] = useState(false);
+    const saveChange = true;
+    const userInf = useSelector(selectUser);
     const [toggle, setToggle] = useState(false)
-
+    const [users, loading] = useCollection(db.collection('users'));
+    const user = users?.docs.find(elem => elem.data().uid === userInf.uid);
     const handleSaveChange = () => {
-        setSaveChange(true);
-        setToggle(!toggle)
+
+        setToggle(!toggle);
+        saveUserToRedux();
     }
+    console.log(user?.data())
+    const dispatch = useDispatch();
+    const saveUserToRedux = async () => {
+        if(!loading, user){
+        dispatch(saveUserInfo({user: user?.data()}))}
+    }
+   
+
     return(
-        <div className="modal fade" id="editProfile" tabindex="-1" aria-labelledby="editProfile" aria-hidden="true">
+        <div className="modal fade" id="editProfile" tabIndex="-1" aria-labelledby="editProfile" aria-hidden="true">
             <div className="modal-dialog modal-dialog-scrollable c-modal-dialog modal-dialog-centered">
                 <div className="modal-content c-modal-content">
                     <div className="c-modal__header">
                         <div className="c-modal__header__title">
                             <h1><div className="text">Edit your propfile</div></h1>
-                        </div>
+                        </div>{
+                        (<div className="notification badge bg-success">
+                            Your info was successfully updated!
+                        </div>)}
                     </div>
 
                     <div className="c-modal__body">

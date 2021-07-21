@@ -37,6 +37,7 @@ function Chat() {
                         const {message, timestamp, user, userImage} = doc.data();
                         return (
                             <Message
+                            key = {doc.id}
                             message = {message}
                             timestamp = {timestamp}
                             user = {user}

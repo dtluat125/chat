@@ -7,13 +7,16 @@ import { app, persistor } from './app/store'
 import { Provider } from 'react-redux';
 import EditProfile from './components/Edit Profile/EditProfile';
 import { PersistGate } from 'redux-persist/integration/react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './firebase';
+
 
 ReactDOM.render(
+  
   <React.StrictMode>
     
     <Provider store={app}>
       <PersistGate loading="null" persistor = {persistor}>
-        <EditProfile/>
         <App />
       </PersistGate>
     </Provider>

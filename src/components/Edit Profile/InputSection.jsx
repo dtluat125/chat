@@ -1,22 +1,23 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react'
-import { useSelector,  } from 'react-redux';
-import { selectDocId } from '../../features/appSlice';
-import { db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { useSelector,  } from 'react-redux';
+import { selectDocId, selectUser } from '../../features/appSlice';
+import { db, storage } from '../../firebase';
 function InputSection(props) {
-    const [user, userLoading] = useCollection(db.collection('users'));
-    const [input, setInput] = useState(props.name==='displayName'?user?.displayName?user.displayName:"":props.name==='WhatIDo'?user?.whatIDo?user.whatIDo:"":'');
     const docUserId = useSelector(selectDocId);
-    
-    
-    const [imgUrl, setImgUrl] = useState(user?.photoURL);
+    const user = useSelector(selectUser);
+    const inputInit = props.name==='displayName'?user.displayName?user.displayName:"":props.name==='whatIDo'?user.whatIDo?user.whatIDo:"":"";
+    const [input, setInput] = useState(inputInit);
+    const [imgUrl, setImgUrl] = useState(user.photoURL);
 
-
-    const handleImgChange = (e) => {
-        const src = URL.createObjectURL(e.target.files[0]);
-        setImgUrl(src);
+    const handleImgChange = async (e) => {
+        const file = e.target.files[0];
+        const storageRef = storage.ref();
+        const fileRef = storageRef.child(file.name);
+        fileRef.put(file);
+        setImgUrl(await fileRef.getDownloadURL()) ;
     }
 
     const handleUpload = () => {
@@ -27,35 +28,37 @@ function InputSection(props) {
     const handleInputChange = (e) =>{
         setInput(e.target.value)
     }
-    
-    const saveChange = () => {
-        console.log("saved!")
-        console.log(props.saveChange)
-        console.log(imgUrl)
+    const [users, loading] = useCollection(db.collection('users'));
+    const selectedDoc =  users?.docs.find(elem => elem.data().uid === user.uid)
+    const id = selectedDoc?.id
+    const saveChange = async () => {
+        let users = db.collection('users')
+        if(!loading&& id&&users)
+        {
         if(props.saveChange){
             if(props.type === 'photo')
-            {db.collection('users').doc(docUserId).update({
+            {await users.doc(id).update({
                 photoURL: imgUrl
-            }).catch(err => err.message);
-        console.log("Saved photo")
+            }).catch(err => alert( err.message));
         }
                 else if(props.type === 'text'){
                     if(props.name === 'displayName')
-                    db.collection('users').doc(docUserId).update({
+                    await users.doc(id).update({
                         displayName: input
-                    });
+                    }).catch(err =>alert( err.message));
                     else if(props.name === 'whatIDo')
-                    db.collection('users').doc(docUserId).update({
+                    await users.doc(id).update({
                         whatIDo: input
-                    });
-                    console.log("Saved data")
+                    }).catch(err =>alert( err.message));
             }
-    }
+    }}
+        
     }
 
+    
     useEffect(() => {
         saveChange();
-    }, [props.saveChange, props.toggle])
+    }, [props.toggle])
     let inputElement;
 
     return (

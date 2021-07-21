@@ -14,11 +14,14 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import { useEffect, useState } from 'react';
 import Loading from './components/Loading';
 import {useDispatch, useSelector} from "react-redux"
-import { docUserId, saveUserInfo } from './features/appSlice';
+import { docUserId, saveUserInfo, selectDocId, selectUser } from './features/appSlice';
+import EditProfile from './components/Edit Profile/EditProfile';
 
 function App() {
-  const [user, userLoading] = useAuthState(auth)
+  const [user, userLoading] = useAuthState(auth);
   const [users, usersLoading] = useCollection( db.collection('users'));
+  const userRedux = useSelector(selectUser);
+  const [proceed, setproceed] = useState(false)
   const checkExist = (user) => {
     if(!usersLoading&&user){
             
@@ -29,6 +32,7 @@ function App() {
 
     }
   }
+
   let chosenUser = {};
   const dispatch = useDispatch()
 
@@ -41,7 +45,8 @@ function App() {
                     email: userInf.email,
                     emailVerified: userInf.emailVerified,
                     uid: userInf.uid,
-                    photoURL: userInf.photoURL
+                    photoURL: userInf.photoURL,
+                    whatIDo: userInf.whatIDo
                   })
               
               dispatch(docUserId(
@@ -58,49 +63,46 @@ function App() {
       else{
               dispatch(docUserId(
                 {
-                  docUserId: 
-                   chosen?.id
+                  docUserId: chosen?.id
                   
                 }
               ))
-          console.log('not add')
+          console.log('not add');
           return;
       }
 
   }
+  
+
 
   
 
-  useEffect(() => {
-    addUser(user)
-    return
-  }, [user, users])
 
+
+  
   return (
     
     <div className="App">
         {/* <LogIn/> */}
         
-        <Router>
+
           
           {
           userLoading?<Loading/>:
           (!user) ? (<LogIn/>):
          (
          <>
+         
           <Header user = {user}/>
           <div className="work-space-body">
             <SideBar>
-              <Switch>
-                <Route path="/" exact>
-                
-                </Route>
-              </Switch>
             </SideBar>
             <Chat/>
           </div>
-          </>)}
-        </Router>
+          <EditProfile/>
+          </>)
+          }
+       
     </div>
   );
 }

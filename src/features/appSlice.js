@@ -18,11 +18,16 @@ export const appSlice = createSlice({
 
         docUserId: (state, action) => {
             state.docUserId = action.payload.docUserId
+        },
+
+        reset: (state, action) => {
+            state.roomId = action.payload.initState;
+            state.user = action.payload.initState;
         }
      }
 });
 
-export const {enterRoom, saveUserInfo, docUserId} = appSlice.actions;
+export const {enterRoom, saveUserInfo, docUserId, reset} = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
 

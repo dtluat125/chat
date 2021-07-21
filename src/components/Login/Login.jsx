@@ -16,10 +16,6 @@ function LogIn(props){
     const user = useAuthState(auth);
 
     
-    const saveUser = (user) => {
-        localStorage.setItem("user", JSON.stringify(user))
-    }
-
     function onSignIn(){
         setIsSignIn(false)
     }
@@ -38,7 +34,7 @@ function LogIn(props){
 
     const signIn = (e) => {
         e.preventDefault();
-        auth.signInWithPopup(provider).catch((error) => 
+        auth.signInWithPopup(provider).then(user => console.log(user.data())).catch((error) => 
         alert(error.message));
     }
     const handleRegister = (e) => {
@@ -56,11 +52,12 @@ function LogIn(props){
     
                 // saveUser(userInf);
     
-                dispatch(
-                    saveUserInfo({
-                        user: userInf
-                    })
-                ) 
+                let userDb ;
+                if(!usersLoading&&users){
+                userDb = users?.docs.find(elem => elem.data().uid === userInf.uid);
+                dispatch(saveUserInfo({user: userDb?.data()}));
+                console.log(userDb.data())
+                }
             }
         )
         .catch(err => alert(err.message))
@@ -78,14 +75,14 @@ function LogIn(props){
                 photoURL: userCred.user.photoURL
             }
 
-            // saveUser(userInf);
-
-            dispatch(
-                saveUserInfo({
-                    user: userInf
-                })
-            ) 
-        })
+            let userDb ;
+            if(!usersLoading&&users){
+            userDb = users?.docs.find(elem => elem.data().uid === userInf.uid);
+            dispatch(saveUserInfo({user: userDb?.data()}));
+            console.log(userDb.data())
+            }
+        }
+        )
         .then(() => {
 
         })

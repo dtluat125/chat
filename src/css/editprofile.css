@@ -96,3 +96,7 @@ span.upload-button{
     border: 1px solid rgb(190, 189, 189)!important;
     border-radius: 5px;
 }
+
+.c-modal__header .notification{
+    margin-right: 50px;
+}

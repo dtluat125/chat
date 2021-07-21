@@ -14,12 +14,24 @@ import { db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
 function SideBar() {
     const [channels, loading, error] = useCollection(db.collection("room"));
+    const [users, usersLoading, usersError] = useCollection(db.collection('users'))
     const channelList = [];
     channels?.docs.map(doc =>channelList.push(<SidebarOption
         title = {doc.data().name}
         key = {doc.id}
         id = {doc.id}
     />))
+    const usersList = [];
+    users?.docs.map(doc =>usersList.push(
+        <SidebarOption
+        title = {doc.data().displayName}
+        email = {doc.data().email}
+        key = {doc.id}
+        // id = {doc.id}
+        photoURL = {doc.data().photoURL}
+        />
+    ) )
+    console.log(usersList)
 
     return (
         <div className="side-bar-container">
@@ -50,7 +62,12 @@ function SideBar() {
             options={channelList}
             />
             
-            
+            <SidebarCollapse
+            title="Direct Message"
+            icon = {<ArrowRightIcon/>}
+            id = "directmessage"
+            options={usersList}
+            />
         </div>
     )
 }

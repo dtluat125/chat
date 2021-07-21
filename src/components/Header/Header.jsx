@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import "../../css/header.css";
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import SearchIcon from '@material-ui/icons/Search';
@@ -7,17 +7,26 @@ import { Dropdown } from 'react-bootstrap';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { auth, db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { useSelector } from 'react-redux';
-import { selectDocId } from '../../features/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { reset, saveUserInfo, selectDocId, selectUser } from '../../features/appSlice';
 
 
 function Header() {
     const docUserId = useSelector(selectDocId);
-    const [user , loading] = useCollection(db.collection('users').doc(docUserId))
+    
+    const userInf = useSelector(selectUser);
+    const [users , loading] = useCollection(db.collection('users'))
+    const user = users?.docs.find(elem => elem.data().uid === userInf.uid)
+    
+    const dispatch = useDispatch();
     const logOut= async() => {
         await auth.signOut().then(() => {
-        }).catch(error => alert(error.message))
+        }).catch(error => alert(error.message));
+        dispatch(reset({
+            initState: null,
+        }));
     }
+   
 
     const displayName = user?.data().displayName;
     const photoURL = user?.data().photoURL;

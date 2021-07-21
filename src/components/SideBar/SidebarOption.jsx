@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux"
 import { enterRoom, selectRoomId } from '../../features/appSlice'
 
 // import {useCollection} from 'react-firebase-hooks'
-function SidebarOption({icon, title, isChannel, id}) {
+function SidebarOption({icon, title, photoURL, id, email}) {
     const dispatch = useDispatch();
     const seeAllDm = () => {}
     const selectChannel = () => {
@@ -15,9 +15,16 @@ function SidebarOption({icon, title, isChannel, id}) {
            )
         }
     }
+
+    const selectPerson = () => {
+        if(id){
+            return
+        }
+    }
+
     const roomId = useSelector(selectRoomId)
     return(
-        (<div className={roomId === id?"sidebar__option-container active":"sidebar__option-container"} tabIndex="1" role="button" onClick={id?selectChannel:seeAllDm}>
+        (<div className={roomId === id?"sidebar__option-container active":"sidebar__option-container"} tabIndex="1" role="button" onClick={(id&&!photoURL)?selectChannel:(photoURL)?selectPerson:seeAllDm}>
             {icon&&
             <div className="sidebar__icon">
                 {icon}
@@ -26,8 +33,8 @@ function SidebarOption({icon, title, isChannel, id}) {
             <div className="sidebar__option__title">
                 {title}
             </div> : <div className="sidebar__option__channel">
-                <span>#</span> {title}
-            </div>            
+                {(!photoURL) ?<span>#</span>:<img src={photoURL} alt="avatar"/>} {title?title:email}
+            </div>          
         } 
         
             
