@@ -27,7 +27,8 @@ function Header() {
         }));
     }
    
-
+    const email = user?.data().email;
+    console.log(email)
     const displayName = user?.data().displayName;
     const photoURL = user?.data().photoURL;
     return (
@@ -73,18 +74,18 @@ function Header() {
                 <Dropdown className="user-dropdown dropdown">
                     <Dropdown.Toggle className="c-button-unstyled dropdown-toggle" id="historyDropdown" variant="success">
                     <span className="user-avatar">
-                        <img src={photoURL} alt="" />
+                        <img src={photoURL?photoURL:"default-avatar.jpg"} alt="" />
                     </span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-menu" aria-labelledby="historyDropdown">
                     
                         <div className="dropdown-item main-menu__user" >
                             <div className="main-menu__user__avatar">
-                            <img src={photoURL} alt="" />
+                            <img src={photoURL?photoURL:"default-avatar.jpg"} alt="" />
                             </div>
                             <div className="main-menu__user__details">
                                 <div className="main-menu__user__name">
-                                    {displayName}
+                                    {displayName?displayName:email}
                                 </div>
                                 <span className="main-menu__user__status">
                                     <FiberManualRecordIcon style={{fontSize: "small"}}/>

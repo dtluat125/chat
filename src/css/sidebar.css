@@ -21,7 +21,7 @@
     padding: 0;
     max-height: 100vh;
     height: 100%;
-    flex: 0.3
+    min-width: 200px    ;
 }
 
 .side-bar__header{
@@ -222,6 +222,8 @@ button.send-button:active{
 }
 
 .sidebar__option__channel img{
-    width: 2rem!important;
+    max-height: 24px;
+    max-width: 24px;
     border-radius: 5px;
 }
+

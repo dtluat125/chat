@@ -3,27 +3,46 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useDispatch, useSelector } from 'react-redux';
 import '../../css/editprofile.css'
-import { saveUserInfo, selectDocId, selectUser } from '../../features/appSlice';
+import { saveUserInfo, selectDataState, selectDocId, selectUser } from '../../features/appSlice';
 import { auth, db } from '../../firebase';
 import InputSection from './InputSection'
 function EditProfile() {
     const saveChange = true;
     const userInf = useSelector(selectUser);
+    const [notification, setNotification] = useState(false)
+    const dataUpdated = useSelector(selectDataState)
     const [toggle, setToggle] = useState(false)
     const [users, loading] = useCollection(db.collection('users'));
     const user = users?.docs.find(elem => elem.data().uid === userInf.uid);
-    const handleSaveChange = () => {
-
+    const userData = user?.data();
+    console.log(dataUpdated)
+    const handleSaveChange = (e) => {
+        e.preventDefault();
         setToggle(!toggle);
-        saveUserToRedux();
+        setNotification(true);
+        setTimeout(() => {
+            setNotification(false);
+        }, 1000);  
     }
-    console.log(user?.data())
     const dispatch = useDispatch();
     const saveUserToRedux = async () => {
-        if(!loading, user){
-        dispatch(saveUserInfo({user: user?.data()}))}
+        
+        if(userData){
+            dispatch(saveUserInfo({user: userData}));
+            console.log("dispatched "+ userData.whatIDo)
+        }
+        else
+        console.log("No dispatch")
     }
+    
+    useEffect(() => {
+        if(dataUpdated){
+            saveUserToRedux()
+        }
+        
+    }, [dataUpdated])
    
+
 
     return(
         <div className="modal fade" id="editProfile" tabIndex="-1" aria-labelledby="editProfile" aria-hidden="true">
@@ -33,7 +52,7 @@ function EditProfile() {
                         <div className="c-modal__header__title">
                             <h1><div className="text">Edit your propfile</div></h1>
                         </div>{
-                        (<div className="notification badge bg-success">
+                        (notification===true&&<div className="notification badge bg-success">
                             Your info was successfully updated!
                         </div>)}
                     </div>

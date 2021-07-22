@@ -16,12 +16,11 @@ import Loading from './components/Loading';
 import {useDispatch, useSelector} from "react-redux"
 import { docUserId, saveUserInfo, selectDocId, selectUser } from './features/appSlice';
 import EditProfile from './components/Edit Profile/EditProfile';
+import Reiszer from './components/Reiszer';
 
 function App() {
   const [user, userLoading] = useAuthState(auth);
   const [users, usersLoading] = useCollection( db.collection('users'));
-  const userRedux = useSelector(selectUser);
-  const [proceed, setproceed] = useState(false)
   const checkExist = (user) => {
     if(!usersLoading&&user){
             
@@ -32,51 +31,6 @@ function App() {
 
     }
   }
-
-  let chosenUser = {};
-  const dispatch = useDispatch()
-
-  const addUser = async (userInf) => {
-      var chosen = checkExist(userInf);
-     
-      if (chosen === undefined&&userInf&&!usersLoading){
-                  chosenUser = await db.collection('users').add({
-                    displayName: userInf.displayName,
-                    email: userInf.email,
-                    emailVerified: userInf.emailVerified,
-                    uid: userInf.uid,
-                    photoURL: userInf.photoURL,
-                    whatIDo: userInf.whatIDo
-                  })
-              
-              dispatch(docUserId(
-                {
-                  docUserId:
-                    chosenUser.id
-               
-                }
-              ))
-              
-              console.log("Success")
-      }
-      
-      else{
-              dispatch(docUserId(
-                {
-                  docUserId: chosen?.id
-                  
-                }
-              ))
-          console.log('not add');
-          return;
-      }
-
-  }
-  
-
-
-  
-
 
 
   
@@ -95,8 +49,8 @@ function App() {
          
           <Header user = {user}/>
           <div className="work-space-body">
-            <SideBar>
-            </SideBar>
+            <SideBar/>
+            <Reiszer/>
             <Chat/>
           </div>
           <EditProfile/>

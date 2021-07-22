@@ -1,7 +1,9 @@
 .chat-container{
-    flex: 0.7;
     position: relative;
     flex-grow: 1;
+    min-width: 0;
+    width: 100%;
+    flex: 1.5;
 }
 
 .chat__header{
@@ -10,7 +12,7 @@
     line-height: 1.33334;
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
     box-shadow: 0 1px 0 0 var(--saf-0);
-    position: sticky
+    position: sticky;
 }
 
 .chat__header__left span{
@@ -40,7 +42,7 @@
 .chat-input-container > form>input{
     position: fixed;
     bottom: 20px;
-    width: 60%;
+    width: 70%;
     border: 1px solid gray;
     border-radius: 3px;
     padding: 10px;
@@ -54,17 +56,21 @@
 
 .message-container{
     display: flex;
-    
+    width: 100%;
     padding: 10px 20px   ;
 }
 
 .message-container > img{
-    height: 36px;
+    max-height: 36px;
+    max-width: 36px;
     border-radius: 8px;
 }
 
 .message__info{
     padding-left: 10px;
+    padding-right: 20px;
+    max-width: 100%;
+    line-height: 1.1;
 }
 
 .message__info .status>span{
@@ -80,8 +86,29 @@
     text-decoration: none;
 }
 
+.message__info p.message{
+    max-width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 10px;
+}
+
 .chat-messages{
     height: 100vh;
     overflow-y: scroll;
     padding-bottom: 20vh;
+    min-width: 0;
+    width: 100%;
+}
+
+.message-container.active{
+    background-color: rgba(248, 248, 248, 0.699);
+}
+
+.resizer{
+    width: 4px;
+    background-color: transparent;
+}
+.resizer:hover{
+    cursor: col-resize;
+    background-color: rgba(29, 155, 209, 1);
 }

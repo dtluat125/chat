@@ -2,16 +2,15 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { useSelector,  } from 'react-redux';
-import { selectDocId, selectUser } from '../../features/appSlice';
+import { useDispatch, useSelector,  } from 'react-redux';
+import { getDataState, selectDocId, selectUser } from '../../features/appSlice';
 import { db, storage } from '../../firebase';
 function InputSection(props) {
-    const docUserId = useSelector(selectDocId);
     const user = useSelector(selectUser);
     const inputInit = props.name==='displayName'?user.displayName?user.displayName:"":props.name==='whatIDo'?user.whatIDo?user.whatIDo:"":"";
     const [input, setInput] = useState(inputInit);
     const [imgUrl, setImgUrl] = useState(user.photoURL);
-
+    const dispatch = useDispatch()
     const handleImgChange = async (e) => {
         const file = e.target.files[0];
         const storageRef = storage.ref();
@@ -40,7 +39,7 @@ function InputSection(props) {
             {await users.doc(id).update({
                 photoURL: imgUrl
             }).catch(err => alert( err.message));
-        }
+            }
                 else if(props.type === 'text'){
                     if(props.name === 'displayName')
                     await users.doc(id).update({
@@ -50,14 +49,23 @@ function InputSection(props) {
                     await users.doc(id).update({
                         whatIDo: input
                     }).catch(err =>alert( err.message));
-            }
-    }}
+                }
+            dispatch(getDataState({
+                dataUpdated: true
+            }))
+        }  
+        }
         
     }
 
     
     useEffect(() => {
         saveChange();
+        return () => {
+            dispatch(getDataState({
+                dataUpdated: null
+            }))
+        }
     }, [props.toggle])
     let inputElement;
 

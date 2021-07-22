@@ -42,6 +42,7 @@ function LogIn(props){
         password !== confirm ? alert("You type different confirm password!"):
         auth.createUserWithEmailAndPassword(email, password).then(
             (userCred) => {
+                console.log(userCred.user)
                 const userInf={
                     displayName: userCred.user.displayName,
                     email: userCred.user.email,
@@ -52,13 +53,10 @@ function LogIn(props){
     
                 // saveUser(userInf);
     
-                let userDb ;
-                if(!usersLoading&&users){
-                userDb = users?.docs.find(elem => elem.data().uid === userInf.uid);
-                dispatch(saveUserInfo({user: userDb?.data()}));
-                console.log(userDb.data())
-                }
+                dispatch(saveUserInfo({user: userInf}));
+                db.collection('users').add(userInf)
             }
+                
         )
         .catch(err => alert(err.message))
     }

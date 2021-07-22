@@ -31,7 +31,6 @@ function SideBar() {
         photoURL = {doc.data().photoURL}
         />
     ) )
-    console.log(usersList)
 
     return (
         <div className="side-bar-container">
