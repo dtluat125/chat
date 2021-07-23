@@ -1,5 +1,4 @@
 import React from 'react'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import '../../css/sidebar.css'
@@ -7,12 +6,11 @@ import SidebarOption from './SidebarOption';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ForumIcon from '@material-ui/icons/Forum';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AddIcon from '@material-ui/icons/Add';
 import { db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
-function SideBar() {
+function SideBar({width}) {
     const [channels, loading, error] = useCollection(db.collection("room"));
     const [users, usersLoading, usersError] = useCollection(db.collection('users'))
     const channelList = [];
@@ -29,11 +27,12 @@ function SideBar() {
         key = {doc.id}
         // id = {doc.id}
         photoURL = {doc.data().photoURL}
+        isOnline = {doc.data().isOnline}
         />
     ) )
 
     return (
-        <div className="side-bar-container">
+        <div className="side-bar-container" style = {{width: width}}>
             <SidebarHeader/>
             <SidebarCollapse options={[
                 <SidebarOption
@@ -72,9 +71,6 @@ function SideBar() {
 }
 
 export default SideBar
-
-
-
 
 
 
@@ -140,14 +136,13 @@ function SidebarCollapse(props){
                 
             </div>
             {
-                    props.addIcon && <div className= "add-channel-button" role="button" onClick={addChannel}>
-                        {props.addIcon}
-                    </div>
-        }
+            props.addIcon && <div className= "add-channel-button" role="button" onClick={addChannel}>
+                {props.addIcon}
+            </div>        
+            }
         
             <div className="collapse" id={`${props.id}`}>
                 {props.options && props.options.map((option) =>{return option})}
-
             </div>
         
 

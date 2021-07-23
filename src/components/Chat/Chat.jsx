@@ -34,7 +34,7 @@ function Chat() {
             <div className="chat-messages">
                 {
                     roomMessages?.docs.map(doc => {
-                        const {message, timestamp, user, userImage} = doc.data();
+                        const {message, timestamp, user, userImage, uid} = doc.data();
                         return (
                             <Message
                             key = {doc.id}
@@ -42,6 +42,7 @@ function Chat() {
                             timestamp = {timestamp}
                             user = {user}
                             userImage = {userImage}
+                            uid = {uid}
                             />
                             
                         )
@@ -51,12 +52,13 @@ function Chat() {
 
                 </div>
             </div>
-            <ChatInput
-            chatRef = {chatRef}
-            channelId = {roomId}
-            channelName = {roomId&&roomDetails?.data().name}
-
-            />
+            <div className="chat__footer">
+                <ChatInput
+                    chatRef = {chatRef}
+                    channelId = {roomId}
+                    channelName = {roomId&&roomDetails?.data().name}
+                />
+            </div>
         </div>
     )
 }

@@ -15,7 +15,6 @@ function EditProfile() {
     const [users, loading] = useCollection(db.collection('users'));
     const user = users?.docs.find(elem => elem.data().uid === userInf.uid);
     const userData = user?.data();
-    console.log(dataUpdated)
     const handleSaveChange = (e) => {
         e.preventDefault();
         setToggle(!toggle);

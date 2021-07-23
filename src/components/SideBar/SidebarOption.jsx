@@ -1,9 +1,11 @@
 import React from 'react'
 import {useDispatch, useSelector} from "react-redux"
 import { enterRoom, selectRoomId } from '../../features/appSlice'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-// import {useCollection} from 'react-firebase-hooks'
-function SidebarOption({icon, title, photoURL, id, email}) {
+
+
+function SidebarOption({icon, title, photoURL, id, email, isOnline}) {
     const dispatch = useDispatch();
     const seeAllDm = () => {}
     const selectChannel = () => {
@@ -33,7 +35,9 @@ function SidebarOption({icon, title, photoURL, id, email}) {
             <div className="sidebar__option__title">
                 {title}
             </div> : <div className="sidebar__option__channel">
-                {(!photoURL) ?<span>#</span>:<img src={photoURL} alt="avatar"/>} {title?title:email}
+                {(!photoURL) ?<span>#</span>:<img src={photoURL} alt="avatar"/>}
+                  <FiberManualRecordIcon className={photoURL?isOnline?"status online":"status offline":"no-status"}/>
+                  {title?title:email}
             </div>          
         } 
         

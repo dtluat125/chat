@@ -12,23 +12,25 @@ import { reset, saveUserInfo, selectDocId, selectUser } from '../../features/app
 
 
 function Header() {
-    const docUserId = useSelector(selectDocId);
-    
     const userInf = useSelector(selectUser);
     const [users , loading] = useCollection(db.collection('users'))
     const user = users?.docs.find(elem => elem.data().uid === userInf.uid)
     
     const dispatch = useDispatch();
     const logOut= async() => {
-        await auth.signOut().then(() => {
-        }).catch(error => alert(error.message));
+        await auth.signOut()
+        .then(() => {
+            db.collection('users').doc(user?.id).update({
+                isOnline: false
+            })
+        })
+        .catch(error => alert(error.message));
         dispatch(reset({
             initState: null,
         }));
     }
    
     const email = user?.data().email;
-    console.log(email)
     const displayName = user?.data().displayName;
     const photoURL = user?.data().photoURL;
     return (

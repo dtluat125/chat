@@ -1,3 +1,5 @@
+/* Custom Button */
+
 .c-button-unstyled {
     background: none!important;
     border: 0!important;
@@ -16,14 +18,20 @@
     box-shadow: none!important;
 }
 
+
+/* Sidebar */
+
+
 .side-bar-container{
     background: #3F0E40;
     padding: 0;
     max-height: 100vh;
     height: 100%;
-    min-width: 200px    ;
+    min-width: 200px;
+    max-width: 500px;
+    user-select: none;
 }
-
+/* Sidebar-header */
 .side-bar__header{
     background: #3F0E40;
     color: #FFFFFF;
@@ -98,7 +106,7 @@
     color: #350d36;
     margin-right: 0;
 }
-
+/* Sidebar body */
 
 .side-bar-container .collapse-container{
     width: 100%;
@@ -211,6 +219,7 @@ button.send-button:active{
 
 .sidebar__option__channel{
     padding-left: 20px;
+    position: relative;
 }
 
 .sidebar__option__channel span{
@@ -225,5 +234,19 @@ button.send-button:active{
     max-height: 24px;
     max-width: 24px;
     border-radius: 5px;
+    margin-right: 10px;
 }
 
+.sidebar__option__channel .no-status{
+    display: none;
+}
+
+.sidebar__option__channel .status{
+    position:absolute;
+    bottom: -5px;
+    left: 36px;
+}
+
+.sidebar__option__channel .online{
+    color: green;
+}

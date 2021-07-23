@@ -37,7 +37,10 @@
     min-height: 100vh;
   }
 
+  @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&family=Montserrat&display=swap');
+
   body{
+    font-family: 'Montserrat', sans-serif!important;
   }
   #root{
     height: 100%;
@@ -47,6 +50,7 @@
     display: flex;
     height: 100%;
     width: 100%;
+    
   }
 
 
