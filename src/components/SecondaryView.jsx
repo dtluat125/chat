@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useDispatch, useSelector } from 'react-redux'
 import '../css/secondaryview.css'
-import { selectSecondaryWorkspaceStatus, selectUserProfileUid } from '../features/appSlice'
+import { selectSecondaryWorkspaceStatus, selectUserProfileUid, showSecondaryWorkspace } from '../features/appSlice'
 import { db } from '../firebase';
 function SecondaryView() {
     const userUid = useSelector(selectUserProfileUid);
@@ -14,7 +14,9 @@ function SecondaryView() {
     const isOpen = useSelector(selectSecondaryWorkspaceStatus);
     const dispatch = useDispatch();
     const closeWorkspace = () => {
-        
+        dispatch(showSecondaryWorkspace({
+            isShowingSecondaryWorkspace: false
+        }))
     }
     return (
         <div className={isOpen?"secondary-view-container active":"secondary-view-container"}>

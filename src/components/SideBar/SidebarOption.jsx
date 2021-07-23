@@ -5,7 +5,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 
 
-function SidebarOption({icon, title, photoURL, id, email, isOnline}) {
+function SidebarOption({icon, title, photoURL, id, email, isOnline, isUser}) {
     const dispatch = useDispatch();
     const seeAllDm = () => {}
     const selectChannel = () => {
@@ -35,7 +35,7 @@ function SidebarOption({icon, title, photoURL, id, email, isOnline}) {
             <div className="sidebar__option__title">
                 {title}
             </div> : <div className="sidebar__option__channel">
-                {(!photoURL) ?<span>#</span>:<img src={photoURL} alt="avatar"/>}
+                {(!isUser) ?<span>#</span>:photoURL?<img src={photoURL} alt="avatar"/>:<img src="default-avatar.jpg" alt="avatar"/>}
                   <FiberManualRecordIcon className={photoURL?isOnline?"status online":"status offline":"no-status"}/>
                   {title?title:email}
             </div>          

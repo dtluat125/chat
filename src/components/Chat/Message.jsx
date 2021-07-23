@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { enterDirectMessage, setUserProfileUid } from '../../features/appSlice';
+import { enterDirectMessage, setUserProfileUid, showSecondaryWorkspace } from '../../features/appSlice';
 import ProfileModal from './ProfileModal';
 
 function Message({user, userImage, message, timestamp, uid}) {
@@ -15,6 +15,9 @@ function Message({user, userImage, message, timestamp, uid}) {
     const sendUserUid = () => {
         dispatch(setUserProfileUid({
             userUid: uid
+        }))
+        dispatch(showSecondaryWorkspace({
+            isShowingSecondaryWorkspace: true
         }))
     }
 

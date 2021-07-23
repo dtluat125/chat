@@ -28,6 +28,7 @@ function SideBar({width}) {
         // id = {doc.id}
         photoURL = {doc.data().photoURL}
         isOnline = {doc.data().isOnline}
+        isUser = {true}
         />
     ) )
 

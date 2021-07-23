@@ -13,6 +13,7 @@
 .secondary-view__header{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     line-height: 1.33334;
     min-width: 300px;
     
@@ -34,9 +35,16 @@
     display: flex;
     margin-right: 10px;
 }
-
+.secondary-view__header__right button{
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    background: inherit;
+    transition: all 0.3s;
+    border-radius: 5px;
+}
 .secondary-view__header__right button:hover{
-    background-color: rgb(199, 199, 199);
+    background: rgb(170, 170, 170)!important;
 }
 
 .secondary-view__body{

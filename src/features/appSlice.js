@@ -44,7 +44,7 @@ export const appSlice = createSlice({
      }
 });
 
-export const {enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
+export const { showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
 
