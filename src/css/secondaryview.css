@@ -67,6 +67,7 @@
 .member-profile__name{
     margin: 0 16px;
     text-align: center;
+    display: flex;
 }
 
 .member-profile__name-title{
@@ -74,4 +75,15 @@
     line-height: 1.33334;
     font-weight: 900;
     margin-bottom: 2px;
+}
+.member-profile__status .status{
+    font-size: 15px;
+}
+
+.member-profile__status .status.offline{
+    color: rgba(99, 98, 98, 0.445);  
+}
+
+.member-profile__status .status.online{
+    color: rgb(1, 163, 1);  
 }

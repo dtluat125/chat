@@ -10,6 +10,7 @@ export const appSlice = createSlice({
         userUid: null,
         directMessageUid: null,
         isShowingSecondaryWorkspace: null,
+        directMessageRoomId: null,
     },
     reducers: {
         enterRoom: (state, action) =>{
@@ -28,12 +29,18 @@ export const appSlice = createSlice({
             state.roomId = action.payload.initState;
             state.user = action.payload.initState;
             state.dataUpdated = action.payload.initState;
+            state.userUid = action.payload.initState;
+            state.directMessageUid= action.payload.initState;
+            state.isShowingSecondaryWorkspace = action.payload.initState;
+            state.docUserId = action.payload.initState;
+            state.directMessageRoomId = action.payload.initState
         },
         getDataState: (state, action) => {
             state.dataUpdated = action.payload.dataUpdated;
         },
         enterDirectMessage: (state, action) => {
             state.directMessageUid = action.payload.directMessageUid;
+            state.directMessageRoomId = action.payload.directMessageRoomId;
         },
         setUserProfileUid:(state, action) => {
             state.userUid = action.payload.userUid;
@@ -60,4 +67,5 @@ export const selectUserProfileUid = state => state.app.userUid;
 
 export const selectSecondaryWorkspaceStatus = state => state.app.isShowingSecondaryWorkspace;
 
+export const selectDirectMessageRoom = state => state.app.directMessageRoomId
 export default appSlice.reducer;

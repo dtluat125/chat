@@ -54,8 +54,8 @@
 
 
 .header__avatar .user-avatar img{
-    height: 28px;
-    width: 28px;
+    max-height: 28px;
+    max-width: 28px;
 }
 
 .header__right{

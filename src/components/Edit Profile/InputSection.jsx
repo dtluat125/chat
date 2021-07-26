@@ -13,10 +13,12 @@ function InputSection(props) {
     const dispatch = useDispatch()
     const handleImgChange = async (e) => {
         const file = e.target.files[0];
+        if(!file) return;
         const storageRef = storage.ref();
         const fileRef = storageRef.child(file.name);
-        fileRef.put(file);
-        setImgUrl(await fileRef.getDownloadURL()) ;
+        await fileRef.put(file);
+        setImgUrl(await fileRef.getDownloadURL())
+        
     }
 
     const handleUpload = () => {

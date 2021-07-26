@@ -220,6 +220,7 @@ button.send-button:active{
 .sidebar__option__channel{
     padding-left: 20px;
     position: relative;
+    display: inline-block;
 }
 
 .sidebar__option__channel span{
@@ -243,10 +244,15 @@ button.send-button:active{
 
 .sidebar__option__channel .status{
     position:absolute;
-    bottom: -5px;
+    top: 17px;
     left: 36px;
 }
 
 .sidebar__option__channel .online{
     color: green;
+}
+/* Unread notifications */
+.unread-notification{
+    top:50%;
+    right: 0px
 }

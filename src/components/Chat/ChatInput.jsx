@@ -3,12 +3,13 @@ import { db } from '../../firebase';
 import firebase from 'firebase';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/appSlice';
-function ChatInput({channelName, channelId, chatRef}) {
+function ChatInput({channelName, channelId, chatRef, isDirect}) {
     const user = useSelector(selectUser);
     const [input, setInput] = useState("");
     const sendMessage = (e) => {
         e.preventDefault();
         if(!channelId) return false;
+        if(!isDirect){
         db.collection("room").doc(channelId).collection("messages").add({
             message: input,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -16,6 +17,21 @@ function ChatInput({channelName, channelId, chatRef}) {
             userImage: user.photoURL,
             uid: user.uid
         });
+        db.collection("room").doc(channelId).update({
+            usersHaveRead: [user.uid]
+        })
+        }
+        else {db.collection("directRooms").doc(channelId).collection("messages").add({
+            message: input,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            user: user.displayName,
+            userImage: user.photoURL,
+            uid: user.uid
+            });
+            db.collection("directRooms").doc(channelId).update({
+                usersHaveRead: [user.uid]
+            })
+        }
         setInput("")
     }
     chatRef?.current?.scrollIntoView({

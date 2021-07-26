@@ -1,6 +1,4 @@
 import React from 'react'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import SendRoundedIcon from '@material-ui/icons/SendRounded';
 import '../../css/sidebar.css'
 import SidebarOption from './SidebarOption';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -10,14 +8,22 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AddIcon from '@material-ui/icons/Add';
 import { db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import SidebarCollapse from './SidebarCollapse';
+import SidebarHeader from './SidebarHeader';
+import { useSelector } from 'react-redux';
+import { selectDirectMessageRoom, selectUser } from '../../features/appSlice';
 function SideBar({width}) {
     const [channels, loading, error] = useCollection(db.collection("room"));
+    const user = useSelector(selectUser);
     const [users, usersLoading, usersError] = useCollection(db.collection('users'))
+    const [directRooms] = useCollection(db.collection("directRooms"))
     const channelList = [];
+    
     channels?.docs.map(doc =>channelList.push(<SidebarOption
         title = {doc.data().name}
         key = {doc.id}
         id = {doc.id}
+        usersHaveReadRoom = {doc.data().usersHaveRead}
     />))
     const usersList = [];
     users?.docs.map(doc =>usersList.push(
@@ -25,10 +31,11 @@ function SideBar({width}) {
         title = {doc.data().displayName}
         email = {doc.data().email}
         key = {doc.id}
-        // id = {doc.id}
+        uid = {doc.data().uid}
         photoURL = {doc.data().photoURL}
         isOnline = {doc.data().isOnline}
         isUser = {true}
+        
         />
     ) )
 
@@ -77,76 +84,4 @@ export default SideBar
 
 
 
-function SidebarHeader() {
-    return (
-        <div>
-            <div className="side-bar__header">
-                <div className="side-bar__header__button">
-                    <div className="side-bar__header__info">
-                         <button className="side-bar__header__team-name c-button-unstyled">
-                             <span>
-                                 Fetch
-                             </span>
-                            <KeyboardArrowDownIcon/>
-                           
-                         </button>
 
-                         
-                    </div>
-                    
-                    
-                </div>
-                <button className="c-button-unstyled send-button">
-                             <SendRoundedIcon style={
-                                 {height: 16}
-                             }/>
-                         </button>
-            </div>
-        </div>
-    )
-}
-
-function SidebarCollapse(props){
-    let isShowing = false;
-    const addChannel = () => {
-        
-        const channelName = prompt('Please Enter the channel name');
-        if(channelName){
-            db.collection('room').add({
-                name: channelName,
-
-            })
-        }
-
-    }
-    const showHandler = () => {
-        isShowing = !isShowing
-    }
-    return(
-        <div className="collapse-container">
-            <div className="sidebar__option-container"
-            type="button" data-bs-toggle="collapse" data-bs-target={`#${props.id}`} aria-expanded="false" aria-controls={`${props.id}`}
-            onClick={showHandler}
-            >
-                <div className={isShowing? props.title==="Channels"?"item-icon arrow-rotate":"item-icon":"item-icon"}>
-                    {props.icon}
-                </div>
-                <div className="item-title">
-                    {props.title}
-                </div>
-                
-            </div>
-            {
-            props.addIcon && <div className= "add-channel-button" role="button" onClick={addChannel}>
-                {props.addIcon}
-            </div>        
-            }
-        
-            <div className="collapse" id={`${props.id}`}>
-                {props.options && props.options.map((option) =>{return option})}
-            </div>
-        
-
-        </div>
-    )
-}

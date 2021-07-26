@@ -4,7 +4,7 @@ import { auth, db, provider } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDispatch } from 'react-redux';
 import { useCollection } from 'react-firebase-hooks/firestore';
-import { saveUserInfo } from '../../features/appSlice';
+import { docUserId, saveUserInfo, setUserProfileUid } from '../../features/appSlice';
 import SignIn from './SignIn';
 import Register from './Register';
 function LogIn(props){
@@ -55,7 +55,9 @@ function LogIn(props){
                 }
     
                 dispatch(saveUserInfo({user: userInf}));
-                db.collection('users').add(userInf)
+                db.collection('users').add(userInf).then(doc => dispatch(docUserId({
+                    docUserId: doc.id
+                })))
             }
                 
         )
@@ -79,8 +81,11 @@ function LogIn(props){
             if(!usersLoading&&users){
             userDb = users?.docs.find(elem => elem.data().uid === userInf.uid);
             dispatch(saveUserInfo({user: userDb?.data()}));
-            console.log(userDb.data())
+            dispatch(docUserId({
+                docUserId: userDb?.id
+            }))
             }
+            
         }
         )
         .catch(err => alert(err.message))

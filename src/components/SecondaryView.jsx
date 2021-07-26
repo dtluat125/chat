@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import '../css/secondaryview.css'
 import { selectSecondaryWorkspaceStatus, selectUserProfileUid, showSecondaryWorkspace } from '../features/appSlice'
 import { db } from '../firebase';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 function SecondaryView() {
     const userUid = useSelector(selectUserProfileUid);
     console.log(userUid)
@@ -11,6 +12,7 @@ function SecondaryView() {
     const user = users?.docs.find(elem => elem.data().uid === userUid)
     const photoURL = user?.data().photoURL?user.data().photoURL:"default-avatar.jpg";
     const title = user?.data().displayName?user.data().displayName:"NULL";
+    const isOnline = user?.data().isOnline;
     const isOpen = useSelector(selectSecondaryWorkspaceStatus);
     const dispatch = useDispatch();
     const closeWorkspace = () => {
@@ -38,7 +40,7 @@ function SecondaryView() {
                         {title}
                     </div>
                     <div className="member-profile__status">
-
+                        <FiberManualRecordIcon className={!isOnline?"status offline":"status online"}/>
                     </div>
                 </div>
             </div>

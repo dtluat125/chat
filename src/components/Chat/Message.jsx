@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { enterDirectMessage, setUserProfileUid, showSecondaryWorkspace } from '../../features/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { enterDirectMessage, selectUser, setUserProfileUid, showSecondaryWorkspace } from '../../features/appSlice';
 import ProfileModal from './ProfileModal';
 
 function Message({user, userImage, message, timestamp, uid}) {
+    const userInf = useSelector(selectUser);
+    const displayName = userInf.uid===uid?"You":user
     const [onHover, setOnHover] = useState(false);
     const hoverHandler = () => {
         setOnHover(true);
@@ -27,7 +29,7 @@ function Message({user, userImage, message, timestamp, uid}) {
             <ProfileModal/>
             <div className="message__info">
                 <div className="status">
-                    <a role="button" onClick={sendUserUid}>{user}</a> <span>{new Date(timestamp?.toDate()).toUTCString()}</span>
+                    <a role="button" onClick={sendUserUid}>{displayName}</a> <span>{new Date(timestamp?.toDate()).toUTCString()}</span>
                 </div>
                 <p className="message">
                     {message}
