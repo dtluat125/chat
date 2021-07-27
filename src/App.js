@@ -15,6 +15,7 @@ import Loading from './components/Loading';
 import EditProfile from './components/Edit Profile/EditProfile';
 import Reiszer from './components/Reiszer';
 import SecondaryView from './components/SecondaryView';
+import ProfileModal from './components/Chat/ProfileModal';
 
 function App() {
   const [user, userLoading] = useAuthState(auth);
@@ -62,7 +63,8 @@ function App() {
           (!user) ? (<LogIn/>):
          (
          <>
-         
+          <EditProfile/>
+          <ProfileModal/>
           <Header user = {user}/>
           <div className="work-space-body">
             <SideBar width={sideBarWidth}/>
@@ -70,7 +72,8 @@ function App() {
             <Chat/>
             <SecondaryView/>
           </div>
-          <EditProfile/>
+      
+
           </>)
           }
 

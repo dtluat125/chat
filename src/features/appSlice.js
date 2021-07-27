@@ -11,6 +11,9 @@ export const appSlice = createSlice({
         directMessageUid: null,
         isShowingSecondaryWorkspace: null,
         directMessageRoomId: null,
+        selectedUser: null,
+        messageSend: false,
+        localTime: null
     },
     reducers: {
         enterRoom: (state, action) =>{
@@ -47,11 +50,20 @@ export const appSlice = createSlice({
         },
         showSecondaryWorkspace:(state, action) => {
             state.isShowingSecondaryWorkspace = action.payload.isShowingSecondaryWorkspace;
+        },
+        setSelectedUser: (state, action) => {
+            state.selectedUser = action.payload.selectedUser
+        },
+        sendMessage :(state, action) => {
+            state.messageSend = action.payload.messageSend;
+        },
+        setTime: (state, action) => {
+            state.localTime = action.payload.localTime
         }
      }
 });
 
-export const { showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
+export const {setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
 
@@ -68,4 +80,10 @@ export const selectUserProfileUid = state => state.app.userUid;
 export const selectSecondaryWorkspaceStatus = state => state.app.isShowingSecondaryWorkspace;
 
 export const selectDirectMessageRoom = state => state.app.directMessageRoomId
+
+export const selectChosenUser = state => state.app.selectedUser
+
+export const selectMessageSend = state => state.app.messageSend
+
+export const selectLocalTime = state => state.app.localTime
 export default appSlice.reducer;

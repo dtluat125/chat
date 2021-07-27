@@ -2,19 +2,18 @@ import React, { useState } from 'react'
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useDispatch, useSelector } from 'react-redux'
 import '../css/secondaryview.css'
-import { selectSecondaryWorkspaceStatus, selectUserProfileUid, showSecondaryWorkspace } from '../features/appSlice'
+import { selectChosenUser, selectLocalTime, selectSecondaryWorkspaceStatus, selectUserProfileUid, showSecondaryWorkspace } from '../features/appSlice'
 import { db } from '../firebase';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 function SecondaryView() {
-    const userUid = useSelector(selectUserProfileUid);
-    console.log(userUid)
-    const [users, loading] = useCollection(db.collection('users'));
-    const user = users?.docs.find(elem => elem.data().uid === userUid)
-    const photoURL = user?.data().photoURL?user.data().photoURL:"default-avatar.jpg";
-    const title = user?.data().displayName?user.data().displayName:"NULL";
-    const isOnline = user?.data().isOnline;
+    const selectedUser = useSelector(selectChosenUser);
+    const photoURL = selectedUser.photoURL?selectedUser.photoURL:"default-avatar.jpg";
+    const title = selectedUser.displayName?selectedUser.displayName:"NULL";
+    const isOnline = selectedUser.isOnline;
     const isOpen = useSelector(selectSecondaryWorkspaceStatus);
     const dispatch = useDispatch();
+    
+    const localTime = useSelector(selectLocalTime);
     const closeWorkspace = () => {
         dispatch(showSecondaryWorkspace({
             isShowingSecondaryWorkspace: false
@@ -41,6 +40,25 @@ function SecondaryView() {
                     </div>
                     <div className="member-profile__status">
                         <FiberManualRecordIcon className={!isOnline?"status offline":"status online"}/>
+                    </div>
+                </div>
+
+                <div className="member-profile__fields">
+                    <div className="member-profile__field">
+                        <div className="member-profile__field__label">Display name</div>
+                        <div className="member-profile__field__value">{selectedUser.displayName}</div>
+                    </div>
+                    <div className="member-profile__field">
+                        <div className="member-profile__field__label">What I do</div>
+                        <div className="member-profile__field__value">{selectedUser.whatIDo}</div>
+                    </div>
+                    <div className="member-profile__field">
+                        <div className="member-profile__field__label">Local time</div>
+                        <div className="member-profile__field__value">{localTime}</div>
+                    </div>
+                    <div className="member-profile__field">
+                        <div className="member-profile__field__label">Email address</div>
+                        <div className="member-profile__field__value">{selectedUser.email}</div>
                     </div>
                 </div>
             </div>

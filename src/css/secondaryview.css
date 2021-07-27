@@ -87,3 +87,26 @@
 .member-profile__status .status.online{
     color: rgb(1, 163, 1);  
 }
+
+.member-profile__fields{
+    margin-top: 16px;
+    align-self: stretch;
+}
+
+.member-profile__field{
+    position: relative;
+    display: flex;
+    padding: 8px 16px;
+    flex-direction: column;
+}
+
+.member-profile__field__label{
+    font-size: 13px;
+    line-height: 1.38463;
+    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    font-weight: 700;
+}
+
+.member-profile__field__value{
+    text-overflow: ellipsis;
+}

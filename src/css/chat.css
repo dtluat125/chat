@@ -6,7 +6,7 @@
     margin-left: -4px;
 
 }
-
+/* Chat Header */
 .chat__header{
     display: flex;
     justify-content: space-between;
@@ -16,6 +16,11 @@
     user-select: none;
 }
 
+.chat__header__left__button{
+    display: flex;
+    align-items: center;
+}
+
 .chat__header__left span{
     display: flex;
     align-items: baseline;
@@ -23,6 +28,33 @@
 
     font-weight: 900;
     margin: 10px;
+}
+
+.chat__header__avatar {
+    height: 24px;
+    width: 24px;
+    position: relative;
+    margin-left: 20px;
+}
+
+.chat__header__avatar{
+    background-size:cover ;
+    background-position: 50%;
+    position: relative;
+    border-radius: 5px;
+}
+
+.chat__header__avatar .status{
+    font-size: 13px!important;
+    color: rgb(179, 177, 177);
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    z-index: 999;
+}
+
+.chat__header__avatar .status.active{
+    color:rgb(1, 163, 1);
 }
 
 .chat__header__right span{
@@ -140,4 +172,150 @@
 .resizer:hover{
     cursor: col-resize;
     background-color: rgba(29, 155, 209, 1);
+}
+
+/* Modal profile */
+.modal-backdrop{
+
+}
+.profile-card{
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    box-shadow: 0 0 0 1px var(--saf-0),0 4px 12px 0 rgba(0,0,0,.08);
+    background: rgba(var(--sk_primary_background,255,255,255),1);
+    border-radius: 8px;
+    width: 300px;
+    z-index: 1061;
+}
+
+.profile-card__header{
+    border-bottom: 1px solid rgba(var(--sk_foreground_low,29,28,29),.13);
+    position: relative;
+}
+.profile-card__picture{
+    background-size: cover;
+    background-position: 50%;
+    position: relative;
+    overflow: hidden;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    height: 260px;
+}
+
+.profile-card__name{
+    padding: 16px 16px 16px 16px;
+    display: flex;
+    align-items: center;
+    
+}
+
+.profile-card__name__title{
+    font-size: 22px;
+    line-height: 1.36365;
+    font-weight: 900;
+    word-break: break-word;
+}
+
+.profile-card__name__title:hover{
+    text-decoration: underline;
+}
+
+.profile-card__name__status .status{
+    font-size: 15px!important;
+    color: rgb(179, 177, 177);
+}
+
+.profile-card__name__status.online .status{
+    color: rgb(1, 163, 1);
+}
+
+.profile-card__link{
+    display: block;
+    margin: -16px 16px 16px;
+    color: rgba(18,100,163, 1);
+    
+}
+.profile-card__link:hover{
+    text-decoration: underline;
+}
+
+.profile-card__time-field{
+    position: relative;
+    display: flex;
+    padding: 8px 16px;
+    flex-direction: column;
+}
+
+.profile-card__time-field__label{
+    font-size: 13px;
+    line-height: 1.38463;
+    color: rgba(var(--sk_foreground_max,29,28,29),.7);
+    font-weight: 700;
+}
+
+.profile-card:last-child{
+    padding-bottom: 16px;
+}
+
+.profile-card__buttons{
+    margin: 4px 16px 0;
+    display: flex;
+}
+
+.c-button{
+    font-size: 15px;
+    height: 36px;
+    min-width: 80px;
+    padding: 0 12px 1px;
+    background: rgba(var(--sk_primary_background,255,255,255),1);
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.c-button:hover{
+    background: rgba(200, 200, 200, .7);
+}
+
+/* Day block message */
+
+.day-block-messages__container{
+    
+}
+
+.day-block-messages__divider{
+    height: 9px;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(var(--sk_primary_foreground,29,28,29),1);
+    cursor: default;
+    display: block;
+    top: 14px;
+    position: relative;
+    text-align: center;
+    user-select: none;
+    margin-bottom: 10px;
+}
+
+.day-block-messages__label{
+    display: inline-block;
+    font-size: 13px;
+    height: 28px;
+    line-height: 27px;
+    padding: 0 16px;
+    z-index: 2;
+    --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
+    box-shadow: 0 0 0 1px var(--saf-0),0 1px 3px 0 rgba(0,0,0,.08);
+    background: rgba(var(--sk_primary_background,255,255,255),1);
+    border-radius: 24px;
+    position: relative;
+    transform: translateY(-14px);
+}
+
+.day-block-messages__divider-line{
+    left: 0;
+    right: 0;
+    border-top: 1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1);
+    border-bottom: 0;
+    margin: 0 0 -1px 0;
+    top: -1px;
+    position: relative;
 }
