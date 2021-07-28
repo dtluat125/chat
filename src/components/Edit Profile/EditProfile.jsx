@@ -13,7 +13,7 @@ function EditProfile() {
     const dataUpdated = useSelector(selectDataState)
     const [toggle, setToggle] = useState(false)
     const [users, loading] = useCollection(db.collection('users'));
-    const user = users?.docs.find(elem => elem.data().uid === userInf.uid);
+    const user = users?.docs.find(elem => elem.data().uid === userInf?.uid);
     const userData = user?.data();
     const handleSaveChange = (e) => {
         e.preventDefault();

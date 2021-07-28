@@ -13,7 +13,8 @@ export const appSlice = createSlice({
         directMessageRoomId: null,
         selectedUser: null,
         messageSend: false,
-        localTime: null
+        localTime: null,
+        roomDetails: null,
     },
     reducers: {
         enterRoom: (state, action) =>{
@@ -59,11 +60,14 @@ export const appSlice = createSlice({
         },
         setTime: (state, action) => {
             state.localTime = action.payload.localTime
+        },
+        setRoomDetails: (state, action) => {
+            state.roomDetails = action.payload.roomDetails
         }
      }
 });
 
-export const {setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
+export const {setRoomDetails, setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
 
@@ -86,4 +90,6 @@ export const selectChosenUser = state => state.app.selectedUser
 export const selectMessageSend = state => state.app.messageSend
 
 export const selectLocalTime = state => state.app.localTime
+
+export const selectRoomDetails = state => state.app.roomDetails
 export default appSlice.reducer;

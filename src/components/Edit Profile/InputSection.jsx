@@ -7,9 +7,9 @@ import { getDataState, selectDocId, selectUser } from '../../features/appSlice';
 import { db, storage } from '../../firebase';
 function InputSection(props) {
     const user = useSelector(selectUser);
-    const inputInit = props.name==='displayName'?user.displayName?user.displayName:"":props.name==='whatIDo'?user.whatIDo?user.whatIDo:"":"";
+    const inputInit = props.name==='displayName'?user?.displayName?user.displayName:"":props.name==='whatIDo'?user?.whatIDo?user.whatIDo:"":"";
     const [input, setInput] = useState(inputInit);
-    const [imgUrl, setImgUrl] = useState(user.photoURL);
+    const [imgUrl, setImgUrl] = useState(user?.photoURL);
     const dispatch = useDispatch()
     const handleImgChange = async (e) => {
         const file = e.target.files[0];
@@ -30,7 +30,7 @@ function InputSection(props) {
         setInput(e.target.value)
     }
     const [users, loading] = useCollection(db.collection('users'));
-    const selectedDoc =  users?.docs.find(elem => elem.data().uid === user.uid)
+    const selectedDoc =  users?.docs.find(elem => elem.data().uid === user?.uid)
     const id = selectedDoc?.id
     const saveChange = async () => {
         let users = db.collection('users')

@@ -5,7 +5,7 @@ import '../css/secondaryview.css'
 import { selectChosenUser, selectLocalTime, selectSecondaryWorkspaceStatus, selectUserProfileUid, showSecondaryWorkspace } from '../features/appSlice'
 import { db } from '../firebase';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-function SecondaryView() {
+function SecondaryView({width, resize}) {
     const selectedUser = useSelector(selectChosenUser);
     const photoURL = selectedUser.photoURL?selectedUser.photoURL:"default-avatar.jpg";
     const title = selectedUser.displayName?selectedUser.displayName:"NULL";
@@ -18,9 +18,10 @@ function SecondaryView() {
         dispatch(showSecondaryWorkspace({
             isShowingSecondaryWorkspace: false
         }))
+        console.log("close")
     }
     return (
-        <div className={isOpen?"secondary-view-container active":"secondary-view-container"}>
+        <div className={isOpen?"secondary-view-container active":"secondary-view-container"} style = {{width: width}}>
             <div className="secondary-view__header">
                 <div className="secondary-view__header__left">
                     <span>Profile</span>

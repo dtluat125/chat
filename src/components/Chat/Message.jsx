@@ -14,7 +14,7 @@ import ProfileModal from "./ProfileModal";
 
 function Message({ userName, userImage, message, timestamp, uid }) {
   const userInf = useSelector(selectUser);
-  const displayName = userInf.uid === uid ? "You" : userName;
+  const displayName = userInf?.uid === uid ? "You" : userName;
   const [onHover, setOnHover] = useState(false);
 
   // Save selected user Info
@@ -27,12 +27,12 @@ function Message({ userName, userImage, message, timestamp, uid }) {
     : "default-avatar.jpg";
   const isOnline = user?.data().isOnline;
   const time = new Date(timestamp?.toDate());
-  var date = time.getDate()
-  var month = time.getMonth()
-  var hours = time.getHours()
-  var minutes = time.getMinutes()
-  if (minutes < 10){
-  minutes = "0" + minutes
+  var date = time.getDate();
+  var month = time.getMonth();
+  var hours = time.getHours();
+  var minutes = time.getMinutes();
+  if (minutes < 10) {
+    minutes = "0" + minutes;
   }
   var localTime = hours + ":" + minutes + " ";
   //
@@ -66,14 +66,11 @@ function Message({ userName, userImage, message, timestamp, uid }) {
           uid: userUid,
           photoURL: photoURL,
           isOnline: isOnline,
-          whatIDo: user?.data().whatIDo
+          whatIDo: user?.data().whatIDo,
         },
       })
     );
   }, [userUid, loading]);
-
-
-
 
   return (
     <div
@@ -81,27 +78,33 @@ function Message({ userName, userImage, message, timestamp, uid }) {
       onMouseOver={hoverHandler}
       onMouseOut={notHoverHandler}
     >
-      <img
-        src={userImage}
-        alt=""
-        role="button"
-        onClick={sendUserUid}
-        data-bs-toggle="modal"
-        data-bs-target="#profileModal"
-      />
-      <div
-        className="message__info"
-        data-bs-toggle="modal"
-        data-bs-target="#profileModal"
-      >
-        <div className="status">
-          <a role="button" onClick={sendUserUid}>
-            {displayName}
-          </a>{" "}
-          <span>{localTime}</span>
-        </div>
-        <p className="message">{message}</p>
-      </div>
+      {timestamp && (
+        <>
+          <div
+            style={{ backgroundImage: `url(${userImage})` }}
+            alt=""
+            role="button"
+            onClick={sendUserUid}
+            data-bs-toggle="modal"
+            data-bs-target="#profileModal"
+            className="message__avatar"
+          />
+
+          <div
+            className="message__info"
+            data-bs-toggle="modal"
+            data-bs-target="#profileModal"
+          >
+            <div className="status">
+              <a role="button" onClick={sendUserUid}>
+                {displayName}
+              </a>{" "}
+              <span>{localTime}</span>
+            </div>
+            <p className="message">{message}</p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

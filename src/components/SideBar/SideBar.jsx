@@ -12,6 +12,7 @@ import SidebarCollapse from './SidebarCollapse';
 import SidebarHeader from './SidebarHeader';
 import { useSelector } from 'react-redux';
 import { selectDirectMessageRoom, selectUser } from '../../features/appSlice';
+import SmallLoader from '../SmallLoader';
 function SideBar({width}) {
     const [channels, loading, error] = useCollection(db.collection("room"));
     const user = useSelector(selectUser);
@@ -23,7 +24,9 @@ function SideBar({width}) {
         title = {doc.data().name}
         key = {doc.id}
         id = {doc.id}
+        isPrivate = {doc.data().isPrivate}
         usersHaveReadRoom = {doc.data().usersHaveRead}
+        members = {doc.data().members}
     />))
     const usersList = [];
     users?.docs.map(doc =>usersList.push(
@@ -35,12 +38,12 @@ function SideBar({width}) {
         photoURL = {doc.data().photoURL}
         isOnline = {doc.data().isOnline}
         isUser = {true}
-        
         />
     ) )
 
     return (
         <div className="side-bar-container" style = {{width: width}}>
+            {(loading&&usersLoading)?<SmallLoader/>:<>
             <SidebarHeader/>
             <SidebarCollapse options={[
                 <SidebarOption
@@ -74,6 +77,7 @@ function SideBar({width}) {
             id = "directmessage"
             options={usersList}
             />
+            </>}
         </div>
     )
 }

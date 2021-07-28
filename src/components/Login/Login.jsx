@@ -67,7 +67,7 @@ function LogIn(props){
     const handleSignIn = (e) => {
         e.preventDefault();
         auth.signInWithEmailAndPassword(email, password)
-        .then( (userCred) => {
+        .then( async (userCred) => {
             const userInf={
                 displayName: userCred.user.displayName,
                 email: userCred.user.email,

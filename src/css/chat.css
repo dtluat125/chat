@@ -21,6 +21,11 @@
     align-items: center;
 }
 
+.chat__header__left__button span:hover{
+    background-color: rgb(211, 209, 209);
+    border-radius: 5px;
+}
+
 .chat__header__left span{
     display: flex;
     align-items: baseline;
@@ -61,6 +66,11 @@
     display: flex;
     
     margin: 10px;
+}
+
+.chat__header__right span:hover{
+    background-color: rgb(211, 209, 209);
+    border-radius: 5px;
 }
 
 /* Chat FOOTER */
@@ -115,11 +125,16 @@
     position: relative;
 }
 
-.message-container > img{
-    max-height: 36px;
-    max-width: 36px;
+.message__avatar{
+    height: 36px;
+    width: 36px;
     border-radius: 8px;
     user-select: none!important;
+    background-size: cover;
+    background-position: 50%;
+    position: relative;
+    overflow: hidden;
+
 }
 
 .message__info{

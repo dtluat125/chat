@@ -53,9 +53,19 @@
 
 
 
-.header__avatar .user-avatar img{
-    max-height: 28px;
-    max-width: 28px;
+.header__avatar .user-avatar{
+    height: 28px;
+    width: 28px;
+    background-size: cover;
+    background-position: 50%;
+    position: relative;
+    overflow: hidden;
+    display: inline;
+}
+
+.header__avatar button{
+    display: flex;
+    align-items: center;
 }
 
 .header__right{
@@ -96,9 +106,13 @@
 }
 
 .main-menu__user__avatar{
-    max-height: 36px;
-    max-width: 36px;
+    height: 36px;
+    width: 36px;
     border-radius: 4px;
+    background-size: cover;
+    background-position: 50%;
+    position: relative;
+    overflow: hidden;
 }
 
 .main-menu__user__avatar>img{

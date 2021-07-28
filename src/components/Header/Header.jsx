@@ -8,13 +8,13 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { auth, db } from '../../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useDispatch, useSelector } from 'react-redux';
-import { reset, saveUserInfo, selectDocId, selectUser } from '../../features/appSlice';
+import { reset, saveUserInfo, selectDocId, selectUser, setUserProfileUid, showSecondaryWorkspace } from '../../features/appSlice';
 
 
 function Header() {
     const userInf = useSelector(selectUser);
     const [users , loading] = useCollection(db.collection('users'))
-    const user = users?.docs.find(elem => elem.data().uid === userInf.uid)
+    const user = users?.docs.find(elem => elem.data().uid === userInf?.uid)
     
     const dispatch = useDispatch();
     const logOut= async() => {
@@ -33,6 +33,15 @@ function Header() {
     const email = user?.data().email;
     const displayName = user?.data().displayName;
     const photoURL = user?.data().photoURL;
+    // Open profile
+    const openProfile = () => {
+        dispatch(setUserProfileUid({
+            userUid: userInf?.uid
+        }))
+        dispatch(showSecondaryWorkspace({
+            isShowingSecondaryWorkspace: true
+        }))
+    }
     return (
         <div className="header-container">
             {/* Header Left */}
@@ -71,19 +80,19 @@ function Header() {
                         <Dropdown.Item className="dropdown-item" href="#">Something else here</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-                <div className="header__avatar">
+                <div className="header__avatar" >
                 
                 <Dropdown className="user-dropdown dropdown">
                     <Dropdown.Toggle className="c-button-unstyled dropdown-toggle" id="historyDropdown" variant="success">
-                    <span className="user-avatar">
-                        <img src={photoURL?photoURL:"default-avatar.jpg"} alt="" />
-                    </span>
+                    <div className="user-avatar" style={{backgroundImage: `url(${photoURL?photoURL:"default-avatar.jpg"})`}}>
+
+                    </div>
                     </Dropdown.Toggle>
                     <Dropdown.Menu className="dropdown-menu" aria-labelledby="historyDropdown">
                     
                         <div className="dropdown-item main-menu__user" >
-                            <div className="main-menu__user__avatar">
-                            <img src={photoURL?photoURL:"default-avatar.jpg"} alt="" />
+                            <div className="main-menu__user__avatar" style={{backgroundImage: `url(${photoURL?photoURL:"default-avatar.jpg"})`}}>
+                            
                             </div>
                             <div className="main-menu__user__details">
                                 <div className="main-menu__user__name">
@@ -97,7 +106,10 @@ function Header() {
                         </div>
                         <div className="dropdown-item" onClick={logOut} >Sign Out</div>
                         <div className="dropdown-item" data-bs-toggle="modal" data-bs-target="#editProfile">
-                            Edit Profile
+                            Edit profile
+                        </div>
+                        <div className="dropdown-item" onClick={openProfile}>
+                            View profile
                         </div>
                     </Dropdown.Menu>
                 </Dropdown>

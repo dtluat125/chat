@@ -1,18 +1,20 @@
-import React from 'react'
+import React from "react";
 
-function DayBlockMessages({time, messages}) {
-    return (
-        <div className = "day-block-messages__container">
-        
+function DayBlockMessages({ time, messages, loading, timestamp }) {
+  return (
+    <div className="day-block-messages__container">
+
+          {timestamp&&(
             <div className="day-block-messages__divider">
-                <div className="day-block-messages__divider-line"></div>
-                <div className="day-block-messages__label">
-                    {time.date+"/"+time.month+"/"+time.year}
-                </div>
+              <div className="day-block-messages__divider-line"></div>
+              <div className="day-block-messages__label">
+                {time.date + "/" + time.month + "/" + time.year}
+              </div>
             </div>
-            {messages?.map(doc => doc)}
-        </div>
-    )
+          )}
+          {messages?.map((doc) => doc)}
+    </div>
+  );
 }
 
-export default DayBlockMessages
+export default DayBlockMessages;

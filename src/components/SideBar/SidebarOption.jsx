@@ -12,6 +12,7 @@ import {
   sendMessage,
 } from "../../features/appSlice";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import LockIcon from '@material-ui/icons/Lock';
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../firebase";
 
@@ -25,13 +26,15 @@ function SidebarOption({
   isOnline,
   isUser,
   usersHaveReadRoom,
+  isPrivate,
+  members
 }) {
   const dispatch = useDispatch();
   const seeAllDm = () => {};
   const directMessageUid = useSelector(selectUserDirect);
   const directMessageRoomId = useSelector(selectDirectMessageRoom);
   const user = useSelector(selectUser);
-  const userUid = user.uid;
+  const userUid = user?.uid;
   const [directRooms, loading] = useCollection(db.collection("directRooms"));
   const directRoom = directRooms?.docs.find((doc) => {
     if (uid === userUid)
@@ -42,9 +45,9 @@ function SidebarOption({
     return doc.data().uids.includes(userUid) && doc.data().uids.includes(uid);
   });
   const usersHaveRead = directRoom?.data().usersHaveRead;
-  const addNewDirect = () => {
+  const addNewDirect = async () => {
     if (!directRoom && uid) {
-      db.collection("directRooms").add({
+      await db.collection("directRooms").add({
         uids: [userUid, uid],
       });
       console.log("added!");
@@ -72,7 +75,7 @@ function SidebarOption({
     }
   };
 
-  const selectPerson = () => {
+  const selectPerson = async () => {
     dispatch(
       enterRoom({
         roomId: null,
@@ -109,6 +112,8 @@ function SidebarOption({
   }, [directMessageUid, directMessageRoomId]);
 
   const roomId = useSelector(selectRoomId);
+
+  if(members?.includes(user.uid)||isUser)
   return (
     <div
       className={
@@ -125,8 +130,8 @@ function SidebarOption({
         <div className="sidebar__option__title">{title}</div>
       ) : (
         <div className="sidebar__option__channel">
-          {!isUser ? (
-            <span>#</span>
+          {!isUser ? (!isPrivate?
+            <span>#</span>:<LockIcon/>
           ) : photoURL ? (
             <img src={photoURL} alt="avatar" />
           ) : (
@@ -154,6 +159,7 @@ function SidebarOption({
         )}
     </div>
   );
+  else return (<div/>)
 }
 
 export default SidebarOption;

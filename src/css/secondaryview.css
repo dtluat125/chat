@@ -1,7 +1,9 @@
 .secondary-view-container{
     display: none;
 }
-
+.secondary-view-container.resize{
+    user-select: none;
+}
 .secondary-view-container.active{
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
     display:block;

@@ -85,7 +85,7 @@ function ProfileModal({loading}) {
 
                     <div className="profile-card__buttons">
                         <button className="c-button--medium c-button" onClick={sendMessage} data-bs-dismiss="modal">Message</button>
-                        {user.uid === uid&&<button className="c-button--medium c-button" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#editProfile">Edit Profile</button>}
+                        {user?.uid === uid&&<button className="c-button--medium c-button" data-bs-toggle="modal" data-bs-dismiss="modal" data-bs-target="#editProfile">Edit Profile</button>}
                     </div>
 
 

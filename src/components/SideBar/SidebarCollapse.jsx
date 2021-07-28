@@ -3,17 +3,7 @@ import { db } from '../../firebase';
 
 function SidebarCollapse(props){
     let isShowing = false;
-    const addChannel = () => {
-        
-        const channelName = prompt('Please Enter the channel name');
-        if(channelName){
-            db.collection('room').add({
-                name: channelName,
-
-            })
-        }
-
-    }
+    
     const showHandler = () => {
         isShowing = !isShowing
     }
@@ -32,7 +22,7 @@ function SidebarCollapse(props){
                 
             </div>
             {
-            props.addIcon && <div className= "add-channel-button" role="button" onClick={addChannel}>
+            props.addIcon && <div className= "add-channel-button" role="button" data-bs-toggle="modal" data-bs-target="#createChannel">
                 {props.addIcon}
             </div>        
             }

@@ -5,10 +5,12 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import {
   enterDirectMessage,
   enterRoom,
+  selectChosenUser,
   selectDirectMessageRoom,
   selectRoomId,
   selectUser,
   selectUserDirect,
+  setRoomDetails,
   setUserProfileUid,
   showSecondaryWorkspace,
 } from "../../features/appSlice";
@@ -18,6 +20,7 @@ import ChatInput from "./ChatInput";
 import Message from "./Message";
 import SmallLoader from "../SmallLoader";
 import DayBlockMessages from "./DayBlockMessages";
+import EditChat from "../Edit Chat/EditChat";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -35,9 +38,10 @@ function Chat() {
       })
     );
   }
-  const [roomDetails] = useCollection(
+  const [roomDetails, roomLoading] = useCollection(
     roomId && db.collection("room").doc(roomId)
   );
+ 
   const [roomMessages, loading] = useCollection(
     roomId &&
       db
@@ -48,6 +52,7 @@ function Chat() {
   );
 
   // Direct message
+  const selectedUser = useSelector(selectChosenUser);
   const roomDirectId = useSelector(selectDirectMessageRoom);
   const [roomDirectDetails] = useCollection(
     roomDirectId && db.collection("directRooms").doc(roomDirectId)
@@ -112,8 +117,9 @@ function Chat() {
             year: year,
             month: month,
           };
+          blocksMessage[config]["timestamp"] = timestamp;
         blocksMessage[config].push(
-          (<Message
+          <Message
             key={doc.id}
             message={message}
             timestamp={timestamp}
@@ -121,7 +127,7 @@ function Chat() {
             userImage={userImage}
             uid={uid}
             isDirect={false}
-          />)
+          />
         );
       })
     : roomDirectMessages?.docs.map((doc) => {
@@ -137,14 +143,17 @@ function Chat() {
           minutes = "0" + minutes;
         }
         if (!blocksMessage[config]) blocksMessage[config] = [];
-        if (!blocksMessage[config].time)
+        if (!blocksMessage[config].time){
           blocksMessage[config]["time"] = {
             date: date,
             year: year,
             month: month,
           };
+          
+        }
+        blocksMessage[config]["timestamp"] = timestamp;
         blocksMessage[config].push(
-          (<Message
+          <Message
             key={doc.id}
             message={message}
             timestamp={timestamp}
@@ -152,11 +161,16 @@ function Chat() {
             userImage={userImage}
             uid={uid}
             isDirect={true}
-          />)
+          />
         );
       });
-    const blocksMessageArr = Object.entries(blocksMessage)
-    console.log(blocksMessageArr)
+  const blocksMessageArr = Object.entries(blocksMessage);
+  // Save room info
+  useEffect(() => {
+    if (!roomLoading) {
+      dispatch(setRoomDetails({ roomDetails: roomDetails?.data() }));
+    }
+  }, [roomId, roomDirectId])
   return (
     <div className="chat-container">
       {loading || directLoading || usersLoading ? (
@@ -166,12 +180,20 @@ function Chat() {
           <div className="chat__header">
             <div className="chat__header__left">
               {roomId ? (
-                <span>#{roomDetails?.data().name}</span>
+                <div
+                  role="button"
+                  data-bs-toggle="modal"
+                  data-bs-target={"#" + roomId}
+                  className="chat__header__left__button"
+                >
+                  <span>#{roomDetails?.data().name}</span>
+                </div>
               ) : (
                 <div
                   role="button"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#${roomDirectId}`}
                   className="chat__header__left__button"
-                  onClick={openProfile}
                 >
                   <div
                     className="chat__header__avatar"
@@ -186,21 +208,24 @@ function Chat() {
               )}
             </div>
             <div className="chat__header__right">
-              <span>Details</span>
+              <span role="button">Details</span>
             </div>
           </div>
 
           <div className="chat-messages">
-            {
-                
-                blocksMessageArr?.map(doc => {
-                    var time = doc[1].time
-                    return (
-                        <DayBlockMessages key = {time.date+time.month+time.year} time = {time} messages = {doc[1]}/>
-                    
-                    )
-                })
-            }
+            {blocksMessageArr?.map((doc) => {
+              var time = doc[1].time;
+              var timestamp = doc[1].timestamp;
+              return (
+                <DayBlockMessages
+                  loading = {directLoading||loading}
+                  key={time.date + time.month + time.year}
+                  time={time}
+                  messages={doc[1]}
+                  timestamp = {timestamp}
+                />
+              );
+            })}
             <div className="chat-bottom" ref={chatRef}></div>
           </div>
           <div className="chat__footer">

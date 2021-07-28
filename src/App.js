@@ -16,12 +16,17 @@ import EditProfile from './components/Edit Profile/EditProfile';
 import Reiszer from './components/Reiszer';
 import SecondaryView from './components/SecondaryView';
 import ProfileModal from './components/Chat/ProfileModal';
+import EditChat from './components/Edit Chat/EditChat';
+import { useSelector } from 'react-redux';
+import { selectDirectMessageRoom, selectRoomDetails, selectRoomId } from './features/appSlice';
+import CreateChannel from './components/Edit Chat/CreateChannel';
 
 function App() {
   const [user, userLoading] = useAuthState(auth);
   // set status to Online
   const [users, usersLoading] = useCollection(db.collection('users'));
   const userDb = users?.docs.find(elem => elem.data().uid === user?.uid);
+  const [resize, setRisze] = useState(false)
   const setStatusToOnline = () => {
     (db.collection('users'))?.doc(userDb?.id)?.update({
       isOnline: true
@@ -35,7 +40,8 @@ function App() {
   }, [user, userDb])
   // Dragbar Logic
   const [sideBarWidth, setSideBarWidth] = useState(200);
-  const handleResize = (e) => {
+  const [profileWidth, setProfileWidth] = useState(300)
+  const handleResizeSideBar = (e) => {
     let prevX = e.clientX;
     window.addEventListener('mousemove',mousemove);
     window.addEventListener('mouseup', mouseup);
@@ -50,7 +56,32 @@ function App() {
     }
 
   }
+
+  const handleResizeChat = (e) =>{
+    setRisze(true)
+    let prevX = e.clientX;
+    let browserWidth = document.body.offsetWidth;
+    console.log(browserWidth)
+    window.addEventListener('mousemove',mousemove);
+    window.addEventListener('mouseup', mouseup);
+    function mousemove (e) {
+        let width = profileWidth - e.clientX + prevX;
+        setProfileWidth(width<300?300:width>600?600:width);
+    }
+    
+    function mouseup(){
+      window.removeEventListener('mousemove', mousemove);
+      window.removeEventListener('mouseup', mouseup);
+      setRisze(false)
+    }
+  } 
   // End Dragbar
+
+  // Get room details
+  const roomDetails = useSelector(selectRoomDetails);
+  const roomId = useSelector(selectRoomId);
+  const roomDirectId = useSelector(selectDirectMessageRoom);
+  const id = roomId?roomId:roomDirectId;
   return (
     
     <div className="App">
@@ -63,14 +94,20 @@ function App() {
           (!user) ? (<LogIn/>):
          (
          <>
+          <CreateChannel/>
+          <EditChat
+          id = {id}
+          roomDetails = {roomDetails}
+          />
           <EditProfile/>
           <ProfileModal/>
           <Header user = {user}/>
           <div className="work-space-body">
             <SideBar width={sideBarWidth}/>
-            <Reiszer onMouseDown = {handleResize}/>
+            <Reiszer onMouseDown = {handleResizeSideBar}/>
             <Chat/>
-            <SecondaryView/>
+            <Reiszer onMouseDown = {handleResizeChat}/>
+            <SecondaryView width = {profileWidth} resize = {resize}/>
           </div>
       
 
