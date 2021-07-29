@@ -82,6 +82,7 @@ function App() {
   const roomId = useSelector(selectRoomId);
   const roomDirectId = useSelector(selectDirectMessageRoom);
   const id = roomId?roomId:roomDirectId;
+  console.log(id);
   return (
     
     <div className="App">

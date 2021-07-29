@@ -113,7 +113,7 @@ function SidebarOption({
 
   const roomId = useSelector(selectRoomId);
 
-  if(members?.includes(user.uid)||isUser)
+  // if(members?.includes(user.uid)||isUser)
   return (
     <div
       className={
@@ -159,7 +159,7 @@ function SidebarOption({
         )}
     </div>
   );
-  else return (<div/>)
+  // else return (<div/>)
 }
 
 export default SidebarOption;

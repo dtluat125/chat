@@ -7,9 +7,9 @@ import { db } from '../firebase';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 function SecondaryView({width, resize}) {
     const selectedUser = useSelector(selectChosenUser);
-    const photoURL = selectedUser.photoURL?selectedUser.photoURL:"default-avatar.jpg";
-    const title = selectedUser.displayName?selectedUser.displayName:"NULL";
-    const isOnline = selectedUser.isOnline;
+    const photoURL = selectedUser?.photoURL?selectedUser?.photoURL:"default-avatar.jpg";
+    const title = selectedUser?.displayName?selectedUser?.displayName:"NULL";
+    const isOnline = selectedUser?.isOnline;
     const isOpen = useSelector(selectSecondaryWorkspaceStatus);
     const dispatch = useDispatch();
     
@@ -47,11 +47,11 @@ function SecondaryView({width, resize}) {
                 <div className="member-profile__fields">
                     <div className="member-profile__field">
                         <div className="member-profile__field__label">Display name</div>
-                        <div className="member-profile__field__value">{selectedUser.displayName}</div>
+                        <div className="member-profile__field__value">{selectedUser?.displayName}</div>
                     </div>
                     <div className="member-profile__field">
                         <div className="member-profile__field__label">What I do</div>
-                        <div className="member-profile__field__value">{selectedUser.whatIDo}</div>
+                        <div className="member-profile__field__value">{selectedUser?.whatIDo}</div>
                     </div>
                     <div className="member-profile__field">
                         <div className="member-profile__field__label">Local time</div>
@@ -59,7 +59,7 @@ function SecondaryView({width, resize}) {
                     </div>
                     <div className="member-profile__field">
                         <div className="member-profile__field__label">Email address</div>
-                        <div className="member-profile__field__value">{selectedUser.email}</div>
+                        <div className="member-profile__field__value">{selectedUser?.email}</div>
                     </div>
                 </div>
             </div>

@@ -8,11 +8,11 @@ function ProfileModal({loading}) {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const selectedUser = useSelector(selectChosenUser);
-    const photoURL = selectedUser.photoURL;
-    const displayName  = selectedUser.displayName;
-    const uid = selectedUser.uid;
-    const email = selectedUser.email;
-    const isOnline = selectedUser.isOnline
+    const photoURL = selectedUser?.photoURL;
+    const displayName  = selectedUser?.displayName;
+    const uid = selectedUser?.uid;
+    const email = selectedUser?.email;
+    const isOnline = selectedUser?.isOnline
     const openSecondView = () => {
         dispatch(showSecondaryWorkspace({
             isShowingSecondaryWorkspace: true

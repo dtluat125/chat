@@ -30,6 +30,7 @@ function Chat() {
   // Room message
   const roomId = useSelector(selectRoomId);
   const directMessageUid = useSelector(selectUserDirect);
+  console.log(roomId)
 
   if (!roomId && !directMessageUid) {
     dispatch(
@@ -170,7 +171,7 @@ function Chat() {
     if (!roomLoading) {
       dispatch(setRoomDetails({ roomDetails: roomDetails?.data() }));
     }
-  }, [roomId, roomDirectId])
+  }, [roomId, roomDirectId, roomDetails])
   return (
     <div className="chat-container">
       {loading || directLoading || usersLoading ? (
@@ -183,7 +184,7 @@ function Chat() {
                 <div
                   role="button"
                   data-bs-toggle="modal"
-                  data-bs-target={"#" + roomId}
+                  data-bs-target={"#" + "a" + roomId}
                   className="chat__header__left__button"
                 >
                   <span>#{roomDetails?.data().name}</span>
@@ -192,7 +193,7 @@ function Chat() {
                 <div
                   role="button"
                   data-bs-toggle="modal"
-                  data-bs-target={`#${roomDirectId}`}
+                  data-bs-target={"#" + 'a' + roomDirectId}
                   className="chat__header__left__button"
                 >
                   <div

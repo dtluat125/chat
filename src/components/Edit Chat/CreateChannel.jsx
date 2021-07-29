@@ -16,6 +16,8 @@ function CreateChannel() {
   const [checked, setChecked] = useState(false);
   const [name, setName] = useState("");
   const [des, setDes] = useState("");
+  const [notification, setNotification] = useState("");
+  const [added, setAdded] = useState(false);
   const handleToggle = () => {
     setToggle(!toggle);
   };
@@ -38,6 +40,10 @@ function CreateChannel() {
   const addChannel = async () => {
     if (!loading) {
       const isExist = await checkExist();
+      if (name === "") {
+        setNotification("Please enter the channel name");
+        return;
+      }
       if (isExist === false) {
         db.collection("room")
           .add({
@@ -45,13 +51,18 @@ function CreateChannel() {
             des: des,
             isPrivate: checked,
             members: checked ? [user.uid] : uids,
-            roomOwner: user
+            roomOwner: user,
           })
           .then((e) => {
-            console.log(e);
-            console.log("added");
+            setNotification("Room was created successfully");
+            setAdded(true);
+          })
+          .catch((err) => {
+            setNotification(err.message);
+            setAdded(false);
           });
-      } else console.log("Channel exists");
+      } else setNotification("Channel exist!");
+      setTimeout(() => setNotification(""), 3000);
     }
   };
 
@@ -64,6 +75,7 @@ function CreateChannel() {
   };
   console.log(name, des);
   console.log(uids);
+  console.log(notification);
   return (
     <div
       className="modal fade"
@@ -77,7 +89,7 @@ function CreateChannel() {
             <SmallLoader />
           ) : (
             <>
-              <div className="create-channel__header">
+              <div className="create-channel__header c-modal__header">
                 <h1>Create a channel</h1>
               </div>
               <div className="create-channel__body">
@@ -145,6 +157,15 @@ function CreateChannel() {
                 >
                   Create
                 </button>
+                {added ? (
+                  <div className="notification badge bg-success">
+                    {notification}
+                  </div>
+                ) : (
+                  <div className="notification badge bg-warning">
+                    {notification}
+                  </div>
+                )}
               </div>
             </>
           )}
