@@ -10,7 +10,6 @@ function CreateChannel() {
   const user = useSelector(selectUser);
   const [users, loading] = useCollection(db.collection("users"));
   let uids = [];
-  console.log(users?.docs);
   users?.docs.map((doc) => uids.push(doc.data().uid));
   const [toggle, setToggle] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -73,9 +72,6 @@ function CreateChannel() {
       else return false;
     }
   };
-  console.log(name, des);
-  console.log(uids);
-  console.log(notification);
   return (
     <div
       className="modal fade"

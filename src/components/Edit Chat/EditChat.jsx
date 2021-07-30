@@ -1,18 +1,33 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import "../../css/editchat.css";
+import { selectChosenUser, selectRoomId, selectUserDirect } from "../../features/appSlice";
+import ProfileModal from "../Chat/ProfileModal";
 import AboutTab from "./AboutTab";
 import InputField from "./InputField";
-function EditChat({ id, roomDetails }) {
-    const roomName = roomDetails?.name;
-    console.log(roomName)
-    const roomDes = roomDetails?.des;
-    const roomOwner = roomDetails?.roomOwner?.displayName;
+import MembersTab from "./MembersTab";
+import RemoveAlertModal from "./RemoveAlertModal";
+import SettingTab from "./SettingTab";
+function EditChat({ id, roomDetails, directUser }) {
+  const userDirectId = useSelector(selectUserDirect);
+  const roomId = useSelector(selectRoomId)
+  const roomName = roomDetails?.name;
+  
+  const roomDes = roomDetails?.des;
+  const roomOwnerName = roomDetails?.roomOwner?.displayName;
+  const roomOwner = roomDetails?.roomOwner
+
+  const userName = directUser?.displayName?directUser.displayName:directUser?.email;
+  const photoURL = directUser?.photoURL?directUser.photoURL:"default-avatar.jpg"; 
+  console.log(userName);
   return (
-    <div className="modal fade" id={'a'+id} tabIndex="-1" aria-hidden="true">
-      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div className="modal fade" id={"a" + id} tabIndex="-1" aria-hidden="true">
+      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable edit-chat-modal">
         <div className="modal-content chat-details-modal">
           <div className="chat-details-modal__header c-modal__header">
-            <h1># {roomDetails?.name}</h1>
+            
+            {!roomId&&(<div className="user__avatar" style={{backgroundImage:`url(${photoURL})`}}></div>)}
+            <h1>{roomId?roomName:userName}</h1>
           </div>
           <div className="chat-details-modal__tabs c-modal__content">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -30,7 +45,7 @@ function EditChat({ id, roomDetails }) {
                   About
                 </span>
               </li>
-              <li class="nav-item" role="presentation">
+              {!userDirectId&&<li class="nav-item" role="presentation">
                 <span
                   class="nav-link"
                   id="profile-tab"
@@ -43,7 +58,8 @@ function EditChat({ id, roomDetails }) {
                 >
                   Members
                 </span>
-              </li>
+              </li>}
+              {!userDirectId&&
               <li class="nav-item" role="presentation">
                 <span
                   class="nav-link"
@@ -57,33 +73,22 @@ function EditChat({ id, roomDetails }) {
                 >
                   Setting
                 </span>
-              </li>
+              </li>}
             </ul>
 
             <div className="c-modal__content__inner">
               <div class="tab-content" id="myTabContent">
-               <AboutTab
-               roomName = {roomName}
-               roomDes = {roomDes}
-               roomOwner = {roomOwner}
-               id = {id}
-               />
-                <div
-                  class="tab-pane fade channel-details__members"
-                  id="members"
-                  role="tabpanel"
-                  aria-labelledby="members-tab"
-                >
-                  Members
-                </div>
-                <div
-                  class="tab-pane fade channel-details__setting"
-                  id="setting"
-                  role="tabpanel"
-                  aria-labelledby="setting-tab"
-                >
-                  setting
-                </div>
+                <AboutTab
+                  roomName={roomName}
+                  roomDes={roomDes}
+                  roomOwner={roomOwnerName}
+                  id={id}
+                />
+                <MembersTab
+                roomMembers = {roomDetails?.members}
+                roomOwner = {roomOwner}
+                />
+                <SettingTab/>
               </div>
             </div>
           </div>

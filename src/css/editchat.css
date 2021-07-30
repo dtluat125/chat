@@ -1,6 +1,5 @@
 .chat-details-modal{
     height: min(85vh,820px);
-    max-width: 580px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -8,12 +7,17 @@
     font-size: 15px;
 }
 
-.chat-details-modal__header{
-    background-color: rgba(var(--sk_primary_background,255,255,255),1);
+.modal-dialog{
+    max-width: 580px!important;
+}
+.c-modal__header{
+    background-color: inherit;
     padding-right: 76px;
     padding: 20px 28px;
     width: 100%;
 }
+
+
 
 .nav-tabs .nav-item span{
     font-size: 13px;
@@ -93,3 +97,108 @@
     background-color: rgb(212, 211, 211);
 }
 
+/* Members tab */
+.channel-details__members{
+    display: flex;
+    flex-direction: column;
+}
+
+.channel-details__members__header{
+    margin: 15px 25px;
+    position: relative;
+}
+.channel-details__members__header .search-icon{
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    color: rgb(114, 113, 113);
+}
+
+.channel-details__members__header input{
+    padding-left: 35px;
+}
+/* Member */
+.channel-details__members__list .member, .add-member{
+    width: 100%;
+    padding: 10px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.channel-details__members__list .member__info{
+    display: flex;
+    align-items: center;
+}
+
+.channel-details__members__list .member:hover, .add-member:hover{
+    background-color: rgba(221, 221, 221, 0.445);
+}
+
+.channel-details__members__list .member__avatar{
+    height: 36px;
+    width: 36px;
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    margin-right: 10px;
+    display: flex;
+
+    align-items: center;
+}
+
+.channel-details__members__list .member__status{
+    margin-left: 10px;
+}
+
+.channel-details__members__list .member__status .status{
+    font-size: 13px;
+    color: rgb(158, 158, 158);
+}
+
+.channel-details__members__list .member__status .status.active{
+    color: rgb(1, 163, 1);
+}
+
+.channel-details__members__list .remove-button > span{
+    color: rgb(18, 100, 163);
+    font-size: 13px;
+}
+
+.channel-details__members__list .remove-button > span:hover{
+    border-bottom: 1px solid rgb(18, 100, 163);
+    z-index: 4;
+}
+
+/*remove Alert  modal */
+#removeAlertModal .modal-dialog{
+    width: 500px;
+}
+
+.remove-alert-modal{
+    background: rgb(240, 240, 240);
+}
+
+.remove-alert-modal .c-modal__content{
+    padding: 0 28px;
+}
+
+.c-modal__footer .c-button--medium{
+    background: rgb(202, 202, 202)!important;
+}
+
+.c-button--medium.danger{
+    background: rgb(216, 29, 87)!important;
+    color: white;
+    font-weight: 900;
+    margin-left: 10px;
+}
+/* User edit page */
+.c-modal__header .user__avatar{
+    width: 72px;
+    height: 72px;
+    background-size: cover;
+    background-position: 50%;
+    border-radius: 10px;
+}

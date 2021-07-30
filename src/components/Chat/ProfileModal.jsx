@@ -50,7 +50,7 @@ function ProfileModal({loading}) {
        
     }, [localTime])
     return (
-        <div id = "profileModal" className="modal"  aria-hidden="true" tabIndex="-1" aria-labelledby="profileModal">
+        <div id = "profileModal"  className="modal"  aria-hidden="true" tabIndex="-1" aria-labelledby="profileModal">
             <div className="modal-dialog modal-dialog-centered">
             
                 <div className="modal-content profile-card">

@@ -4,15 +4,13 @@ import { selectRoomDetails } from "../../features/appSlice";
 import { db } from "../../firebase";
 import InputField from "./InputField";
 
-function AboutTab({roomName, roomDes, roomOwner, id}) {
-  
+function AboutTab({ roomName, roomDes, roomOwner, id }) {
   const [name, setName] = useState(roomName);
-  const [des, setDes] = useState(roomDes?roomDes:"");
+  const [des, setDes] = useState(roomDes ? roomDes : "");
   useEffect(() => {
-    setName(roomName)
-    setDes(roomDes?roomDes:"")
-    
-}, [roomName, roomDes])
+    setName(roomName);
+    setDes(roomDes ? roomDes : "");
+  }, [roomName, roomDes]);
   const [notification, setNotification] = useState("");
   const [changed, setChanged] = useState(false);
   const handleNameChange = (e) => {
@@ -26,22 +24,23 @@ function AboutTab({roomName, roomDes, roomOwner, id}) {
     setDes(content);
   };
   const saveChange = () => {
-    if(name === "") {
+    if (name === "") {
       setNotification("Name must not be left empty!, try again");
-      setChanged(false)
-      setName(roomName  )
+      setChanged(false);
+      setName(roomName);
       return;
     }
-    db.collection('room').doc(id).update({
-      name: name,
-      des: des
-    })
-    .then(() => {
-      setChanged(true);
-      setNotification("Channel was updated successfully!");
-
-    })
-    .catch(err => notification(err.message))
+    db.collection("room")
+      .doc(id)
+      .update({
+        name: name,
+        des: des,
+      })
+      .then(() => {
+        setChanged(true);
+        setNotification("Channel was updated successfully!");
+      })
+      .catch((err) => notification(err.message));
   };
   return (
     <div
@@ -82,11 +81,13 @@ function AboutTab({roomName, roomDes, roomOwner, id}) {
       <div className="text-group">
         <div className="text-field">
           <div className="text-field__title">Created by</div>
-          <div className="text-field__content">{roomOwner?roomOwner:"..."}</div>
+          <div className="text-field__content">
+            {roomOwner ? roomOwner : "..."}
+          </div>
         </div>
 
-        <div className="text-field leave-button" role = "button">
-            <div className="text-field__title">Leave Channel</div>
+        <div className="text-field leave-button" role="button">
+          <div className="text-field__title">Leave Channel</div>
         </div>
       </div>
     </div>

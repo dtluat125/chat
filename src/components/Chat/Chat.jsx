@@ -10,6 +10,7 @@ import {
   selectRoomId,
   selectUser,
   selectUserDirect,
+  setDirectUser,
   setRoomDetails,
   setUserProfileUid,
   showSecondaryWorkspace,
@@ -30,7 +31,6 @@ function Chat() {
   // Room message
   const roomId = useSelector(selectRoomId);
   const directMessageUid = useSelector(selectUserDirect);
-  console.log(roomId)
 
   if (!roomId && !directMessageUid) {
     dispatch(
@@ -42,7 +42,8 @@ function Chat() {
   const [roomDetails, roomLoading] = useCollection(
     roomId && db.collection("room").doc(roomId)
   );
- 
+  
+  
   const [roomMessages, loading] = useCollection(
     roomId &&
       db
@@ -171,7 +172,15 @@ function Chat() {
     if (!roomLoading) {
       dispatch(setRoomDetails({ roomDetails: roomDetails?.data() }));
     }
-  }, [roomId, roomDirectId, roomDetails])
+  }, [roomId, roomDetails])
+  // Save user direct info
+  useEffect(() => {
+    if(!usersLoading) {
+      dispatch(setDirectUser({
+        directUser: directUser?.data()
+      }))
+    }
+  }, [roomDirectId])
   return (
     <div className="chat-container">
       {loading || directLoading || usersLoading ? (

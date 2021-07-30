@@ -10,6 +10,7 @@ import {
   selectUserDirect,
   selectUserProfileUid,
   sendMessage,
+  setSelectedUser,
 } from "../../features/appSlice";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import LockIcon from '@material-ui/icons/Lock';
@@ -74,7 +75,6 @@ function SidebarOption({
         });
     }
   };
-
   const selectPerson = async () => {
     dispatch(
       enterRoom({
@@ -93,6 +93,9 @@ function SidebarOption({
           directMessageRoomId: directRoom?.id,
         })
       );
+      dispatch(setSelectedUser({
+
+      }))
       db.collection("directRooms")
         .doc(directRoom.id)
         .update({
@@ -100,6 +103,7 @@ function SidebarOption({
             ? usersHaveRead.concat(user.uid)
             : [userUid],
         });
+       
     }
   };
   // Handle send message button
@@ -109,11 +113,15 @@ function SidebarOption({
       selectPerson();
       console.log("updated");
     }
-  }, [directMessageUid, directMessageRoomId]);
+  }, [directMessageUid, directMessageRoomId, loading]);
+
+
+  
+
 
   const roomId = useSelector(selectRoomId);
 
-  // if(members?.includes(user.uid)||isUser)
+  if(members?.includes(user.uid)||isUser)
   return (
     <div
       className={
@@ -159,7 +167,7 @@ function SidebarOption({
         )}
     </div>
   );
-  // else return (<div/>)
+  else return (<div/>)
 }
 
 export default SidebarOption;

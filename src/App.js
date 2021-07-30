@@ -18,8 +18,9 @@ import SecondaryView from './components/SecondaryView';
 import ProfileModal from './components/Chat/ProfileModal';
 import EditChat from './components/Edit Chat/EditChat';
 import { useSelector } from 'react-redux';
-import { selectDirectMessageRoom, selectRoomDetails, selectRoomId } from './features/appSlice';
+import { selectChosenUser, selectDirectMessageRoom, selectDirectUser, selectRoomDetails, selectRoomId } from './features/appSlice';
 import CreateChannel from './components/Edit Chat/CreateChannel';
+import RemoveAlertModal from './components/Edit Chat/RemoveAlertModal';
 
 function App() {
   const [user, userLoading] = useAuthState(auth);
@@ -82,7 +83,8 @@ function App() {
   const roomId = useSelector(selectRoomId);
   const roomDirectId = useSelector(selectDirectMessageRoom);
   const id = roomId?roomId:roomDirectId;
-  console.log(id);
+  const directUser = useSelector(selectDirectUser);
+  const selectedUser = useSelector(selectChosenUser);
   return (
     
     <div className="App">
@@ -99,8 +101,12 @@ function App() {
           <EditChat
           id = {id}
           roomDetails = {roomDetails}
+          directUser = {directUser}
           />
           <EditProfile/>
+          <RemoveAlertModal
+          uid = {selectedUser?.uid}
+          />
           <ProfileModal/>
           <Header user = {user}/>
           <div className="work-space-body">
