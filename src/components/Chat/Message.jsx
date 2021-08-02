@@ -90,13 +90,14 @@ function Message({ userName, userImage, message, timestamp, uid }) {
             className="message__avatar"
           />
 
-          <div
-            className="message__info"
-            data-bs-toggle="modal"
-            data-bs-target="#profileModal"
-          >
+          <div className="message__info">
             <div className="status">
-              <a role="button" onClick={sendUserUid}>
+              <a
+                role="button"
+                onClick={sendUserUid}
+                data-bs-toggle="modal"
+                data-bs-target="#profileModal"
+              >
                 {displayName}
               </a>{" "}
               <span>{localTime}</span>

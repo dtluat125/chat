@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { selectChosenUser, selectDirectMessageRoom, selectDirectUser, selectRoomDetails, selectRoomId } from './features/appSlice';
 import CreateChannel from './components/Edit Chat/CreateChannel';
 import RemoveAlertModal from './components/Edit Chat/RemoveAlertModal';
-
+import $ from "jquery"
 function App() {
   const [user, userLoading] = useAuthState(auth);
   // set status to Online
@@ -33,7 +33,6 @@ function App() {
       isOnline: true
     })
   }
-  console.log(userDb?.data())
   useEffect(() => {
     if(user&&userDb){
       setStatusToOnline();
@@ -85,6 +84,31 @@ function App() {
   const id = roomId?roomId:roomDirectId;
   const directUser = useSelector(selectDirectUser);
   const selectedUser = useSelector(selectChosenUser);
+
+  // Modal stack setting
+  const [toggle, setToggle] = useState(false);
+  const handleToggle = () => {
+    setToggle(!toggle);
+    console.log("Clicked")
+  }
+
+  useEffect(() => {
+    console.log(toggle)
+    console.log($('.modal:visible'))
+    $(document).on('shown.bs.modal', '.modal', function(){
+      console.log("Added!!!1");
+      var zIndex = 1040+(20*$('.modal:visible').length);
+      $(this).css('z-index', zIndex);
+      setTimeout(function() {
+          $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1+`!important`).addClass('modal-stack');
+
+      }, 0);
+    });
+    
+  }, [toggle])
+
+
+
   return (
     
     <div className="App">
@@ -102,6 +126,7 @@ function App() {
           id = {id}
           roomDetails = {roomDetails}
           directUser = {directUser}
+          onClick = {handleToggle}
           />
           <EditProfile/>
           <RemoveAlertModal
@@ -112,7 +137,9 @@ function App() {
           <div className="work-space-body">
             <SideBar width={sideBarWidth}/>
             <Reiszer onMouseDown = {handleResizeSideBar}/>
-            <Chat/>
+            <Chat
+            onClick = {handleToggle}
+            />
             <Reiszer onMouseDown = {handleResizeChat}/>
             <SecondaryView width = {profileWidth} resize = {resize}/>
           </div>

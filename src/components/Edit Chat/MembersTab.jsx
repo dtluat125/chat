@@ -4,7 +4,7 @@ import { db } from "../../firebase";
 import Member from "./Member";
 import SearchIcon from '@material-ui/icons/Search';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-function MembersTab({roomMembers, roomOwner}) {
+function MembersTab({roomMembers, roomOwner, onClick}) {
     const [users, loading] = useCollection(db.collection('users'));
     let membersList = [];
     users?.docs.map(doc => {
@@ -36,6 +36,7 @@ function MembersTab({roomMembers, roomOwner}) {
         {membersList.map(user => {
             return (
                 <Member 
+                onClick = {onClick}
                 user = {user}
                 roomOwner = {roomOwner}
                 />

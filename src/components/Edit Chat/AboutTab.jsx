@@ -1,10 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectRoomDetails } from "../../features/appSlice";
+import {
+  selectRoomDetails,
+  selectRoomId,
+  selectUser,
+  setIsModalOpen,
+} from "../../features/appSlice";
 import { db } from "../../firebase";
 import InputField from "./InputField";
+import $ from "jquery";
+import { useDispatch } from "react-redux";
 
-function AboutTab({ roomName, roomDes, roomOwner, id }) {
+function AboutTab({
+  roomName,
+  roomDes,
+  roomOwner,
+  id,
+  isPrivate,
+  roomMembers,
+}) {
+  const dispatch = useDispatch()
   const [name, setName] = useState(roomName);
   const [des, setDes] = useState(roomDes ? roomDes : "");
   useEffect(() => {
@@ -42,6 +57,51 @@ function AboutTab({ roomName, roomDes, roomOwner, id }) {
       })
       .catch((err) => notification(err.message));
   };
+
+  
+  // Leave channel Handle
+  const user = useSelector(selectUser);
+  const [alert, setAlert] = useState(false);
+  const [leave, setLeave] = useState(false);
+  const [left, setLeft] = useState(false);
+  const openAlert = () => {
+    setAlert(true);
+  };
+  const closeAlert = () => {
+    setAlert(false);
+  };
+  const leaveChannel = () => {
+    setLeave(true);
+  };
+  const roomId = useSelector(selectRoomId);
+  var membersArr = roomMembers?.slice();
+  var index = membersArr?.indexOf(user.uid);
+  membersArr?.splice(index, 1);
+  useEffect(() => {
+    console.log(leave);
+    if (leave) {
+      db.collection("room")
+        .doc(roomId)
+        .update({
+          members: membersArr ? membersArr : [],
+        })
+        .then(() => {
+          dispatch(setIsModalOpen({
+            isModalOpen: false
+          }))
+        })
+        .catch((err) => alert(err.message));
+      console.log("success");
+    }
+  }, [leave]);
+  // let modalId = '#a' + id
+  // console.log(modalId)
+  // useEffect(() => {
+  //   if(left){
+  //     $(modalId).modal('hide')
+  //   }
+  // }, [left])
+
   return (
     <div
       class="tab-pane fade show active channel-details__about"
@@ -49,7 +109,7 @@ function AboutTab({ roomName, roomDes, roomOwner, id }) {
       role="tabpanel"
       aria-labelledby="about-tab"
     >
-      <div className="input-group">
+      <div className="input-group c-tab-group">
         <InputField
           fieldLabel="Name"
           required={true}
@@ -78,7 +138,7 @@ function AboutTab({ roomName, roomDes, roomOwner, id }) {
         </div>
       </div>
 
-      <div className="text-group">
+      <div className="text-group c-tab-group">
         <div className="text-field">
           <div className="text-field__title">Created by</div>
           <div className="text-field__content">
@@ -87,9 +147,32 @@ function AboutTab({ roomName, roomDes, roomOwner, id }) {
         </div>
 
         <div className="text-field leave-button" role="button">
-          <div className="text-field__title">Leave Channel</div>
+          <div className="text-field__title" onClick={openAlert}>
+            Leave Channel
+          </div>
         </div>
       </div>
+      {alert && (
+        <div className="c-tab-group alert">
+          <span>
+            Do you want to leave channel?{" "}
+            {isPrivate && (
+              <>
+                This is a <strong>private</strong> channel so it cannot be
+                accessed by outsiders.
+              </>
+            )}
+          </span>
+          <div className="buttons-group">
+            <button className="btn btn-secondary" onClick={closeAlert}>
+              Cancel
+            </button>
+            <button className="btn btn-danger" onClick={leaveChannel}>
+              Leave
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -16,6 +16,7 @@ export const appSlice = createSlice({
         localTime: null,
         roomDetails: null,
         directUser: null,
+        isModalOpen: null,
     },
     reducers: {
         enterRoom: (state, action) =>{
@@ -67,11 +68,14 @@ export const appSlice = createSlice({
         },
         setDirectUser: (state, action) => {
             state.directUser = action.payload.directUser
+        },
+        setIsModalOpen: (state, action) => {
+            state.isModalOpen = action.payload.isModalOpen
         }
      }
 });
 
-export const {setDirectUser, setRoomDetails, setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
+export const {setIsModalOpen, setDirectUser, setRoomDetails, setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
 
@@ -98,4 +102,6 @@ export const selectLocalTime = state => state.app.localTime
 export const selectRoomDetails = state => state.app.roomDetails
 
 export const selectDirectUser = state => state.app.directUser
+
+export const selectModalState = state => state.app.isModalOpen
 export default appSlice.reducer;

@@ -3,7 +3,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser, setSelectedUser, setUserProfileUid } from '../../features/appSlice';
 
-function Member({user, roomOwner}) {
+function Member({user, roomOwner, onClick}) {
     const dispatch = useDispatch()
     const loginUser = useSelector(selectUser)
     const photoURL = user?.photoURL?user.photoURL:"default-avatar.jpg";
@@ -25,7 +25,7 @@ function Member({user, roomOwner}) {
             </div>
             {(loginUser?.uid === roomOwner?.uid)&&
             <div className="remove-button">
-                <span role="button" data-bs-toggle="modal" data-bs-target = "#removeAlertModal"><strong>Remove</strong></span>
+                <span role="button" data-bs-toggle="modal" data-bs-target = "#removeAlertModal" onClick={onClick}><strong>Remove</strong></span>
             </div>}
         </div>
     )

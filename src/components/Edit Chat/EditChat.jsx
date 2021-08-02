@@ -8,15 +8,15 @@ import InputField from "./InputField";
 import MembersTab from "./MembersTab";
 import RemoveAlertModal from "./RemoveAlertModal";
 import SettingTab from "./SettingTab";
-function EditChat({ id, roomDetails, directUser }) {
+function EditChat({ id, roomDetails, directUser, onClick }) {
   const userDirectId = useSelector(selectUserDirect);
   const roomId = useSelector(selectRoomId)
   const roomName = roomDetails?.name;
-  
+  const roomMembers = roomDetails?.members;
   const roomDes = roomDetails?.des;
   const roomOwnerName = roomDetails?.roomOwner?.displayName;
-  const roomOwner = roomDetails?.roomOwner
-
+  const roomOwner = roomDetails?.roomOwner;
+  const isPrivate = roomDetails?.isPrivate; 
   const userName = directUser?.displayName?directUser.displayName:directUser?.email;
   const photoURL = directUser?.photoURL?directUser.photoURL:"default-avatar.jpg"; 
   console.log(userName);
@@ -83,8 +83,11 @@ function EditChat({ id, roomDetails, directUser }) {
                   roomDes={roomDes}
                   roomOwner={roomOwnerName}
                   id={id}
+                  isPrivate = {isPrivate}
+                  roomMembers = {roomMembers}
                 />
                 <MembersTab
+                onClick = {onClick}
                 roomMembers = {roomDetails?.members}
                 roomOwner = {roomOwner}
                 />

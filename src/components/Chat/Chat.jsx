@@ -196,7 +196,7 @@ function Chat() {
                   data-bs-target={"#" + "a" + roomId}
                   className="chat__header__left__button"
                 >
-                  <span>#{roomDetails?.data().name}</span>
+                  <span>#{roomDetails?.data()?.name}</span>
                 </div>
               ) : (
                 <div
@@ -242,7 +242,7 @@ function Chat() {
             <ChatInput
               chatRef={chatRef}
               channelId={roomId ? roomId : roomDirectId}
-              channelName={roomId ? roomDetails?.data().name : directTitle}
+              channelName={roomId ? roomDetails?.data()?.name : directTitle}
               isDirect={roomId ? false : true}
             />
           </div>

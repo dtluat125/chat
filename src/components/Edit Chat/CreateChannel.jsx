@@ -124,8 +124,7 @@ function CreateChannel() {
                     <div className="channel-type-des__body c-gray-text">
                       {checked && (
                         <>
-                          <strong>This can’t be undone</strong>. A private
-                          channel cannot be made public later on.
+                          <strong>Private Channel cannot be accessed from outsiders</strong>.
                         </>
                       )}
                       {!checked &&
