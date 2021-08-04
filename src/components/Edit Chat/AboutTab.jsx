@@ -22,6 +22,7 @@ function AboutTab({
   const dispatch = useDispatch()
   const [name, setName] = useState(roomName);
   const [des, setDes] = useState(roomDes ? roomDes : "");
+  const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
   useEffect(() => {
     setName(roomName);
     setDes(roomDes ? roomDes : "");
@@ -54,6 +55,9 @@ function AboutTab({
       .then(() => {
         setChanged(true);
         setNotification("Channel was updated successfully!");
+        setTimeout(() => {
+          setNotification("")
+        }, 2000)
       })
       .catch((err) => notification(err.message));
   };
@@ -94,14 +98,9 @@ function AboutTab({
       console.log("success");
     }
   }, [leave]);
-  // let modalId = '#a' + id
-  // console.log(modalId)
-  // useEffect(() => {
-  //   if(left){
-  //     $(modalId).modal('hide')
-  //   }
-  // }, [left])
 
+// Direct room
+const directUserId = useSelector(select)
   return (
     <div
       class="tab-pane fade show active channel-details__about"
@@ -109,6 +108,7 @@ function AboutTab({
       role="tabpanel"
       aria-labelledby="about-tab"
     >
+      {roomId&&<>
       <div className="input-group c-tab-group">
         <InputField
           fieldLabel="Name"
@@ -116,6 +116,7 @@ function AboutTab({
           hyphenized={true}
           onChange={handleNameChange}
           value={name}
+          disabled = {id===defaultRoomId}
         />
         <InputField
           fieldLabel="Description"
@@ -152,6 +153,8 @@ function AboutTab({
           </div>
         </div>
       </div>
+      </>}
+      {}
       {alert && (
         <div className="c-tab-group alert">
           <span>
@@ -167,7 +170,7 @@ function AboutTab({
             <button className="btn btn-secondary" onClick={closeAlert}>
               Cancel
             </button>
-            <button className="btn btn-danger" onClick={leaveChannel}>
+            <button className="btn btn-danger" data-bs-dismiss="modal" data-bs-target={"a" + id} onClick={leaveChannel}>
               Leave
             </button>
           </div>

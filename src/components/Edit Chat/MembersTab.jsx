@@ -1,17 +1,66 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../firebase";
 import Member from "./Member";
-import SearchIcon from '@material-ui/icons/Search';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-function MembersTab({roomMembers, roomOwner, onClick}) {
-    const [users, loading] = useCollection(db.collection('users'));
-    let membersList = [];
-    users?.docs.map(doc => {
-        if(roomMembers?.includes(doc.data().uid) ){
-            membersList.push(doc.data());
-        }
-    })
+import SearchIcon from "@material-ui/icons/Search";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import { useState } from "react";
+function MembersTab({ roomMembers, roomOwner, id }) {
+  const [users, loading] = useCollection(db.collection("users"));
+
+  let membersList = []
+  users?.docs.map((doc) => {
+    if (roomMembers?.includes(doc.data().uid)) {
+      membersList.push(doc.data());
+    }
+  });
+
+  // Handle Add people
+  const [isAdded, setIsAdded] = useState(false);
+  let membersArr = roomMembers?.slice();
+  const addUser = (user) => {
+    console.log(id);
+    if (user && roomMembers) {
+      membersArr.push(user.uid);
+      db.collection("room")
+        .doc(id)
+        .update({
+          members: membersArr,
+        })
+        .then((data) => {
+          console.log(data);
+          setIsAdded(true);
+        });
+    }
+  };
+
+  const addAllUser = () => {
+    console.log(users);
+    if (users && roomMembers) {
+      users?.docs.map((doc) => {
+        membersArr.push(doc.data().uid);
+      });
+      db.collection("room")
+        .doc(id)
+        .update({
+          members: membersArr,
+        })
+        .then((data) => {
+          console.log(data);
+          setIsAdded(true);
+        });
+    }
+  };
+
+  // Handle Search Member
+  const [searchMemberInput, setSearchMemberInput] = useState("");
+  const [searchAddInput, setSearchAddInput] = useState("")
+  const searchMemberInputHandler = (e) => {
+    setSearchMemberInput(e.target.value);
+  };
+  const searchAddInputHandler = (e) => {
+    setSearchAddInput(e.target.value)
+  };
   return (
     <div
       class="tab-pane fade channel-details__members"
@@ -21,26 +70,75 @@ function MembersTab({roomMembers, roomOwner, onClick}) {
     >
       <div className="channel-details__members__header">
         <div className="form-group">
-            <SearchIcon className="search-icon"/>
-            <input type="text" className="form-control" placeholder="Find members" />
+          <SearchIcon className="search-icon" />
+          <input
+            onChange={searchMemberInputHandler}
+            type="text"
+            className="form-control"
+            placeholder="Find members"
+            value={searchMemberInput}
+          />
         </div>
       </div>
 
       <div className="channel-details__members__list">
-        <div className="member" role="button">
-            <div className = "member__info">
-                <div className="member__avatar" ><PersonAddIcon/></div>
-                <div className="member__name" ><strong>Add people</strong></div>
+        <div className="dropdown">
+          <div
+            className="member dropdown-toggle"
+            role="button"
+            data-bs-toggle="dropdown"
+            data-bs-auto-close="outside"
+            aria-expanded="false"
+            id="addUsers"
+          >
+            <div className="member__info">
+              <div className="member__avatar">
+                <PersonAddIcon />
+              </div>
+              <div className="member__name">
+                <strong>Add people</strong>
+              </div>
             </div>
+          </div>
+          <div
+            className="dropdown-menu"
+            aria-labelledby="addUsers"
+            style={{ maxHeight: 300, maxWidth: 100 + "%", width: "100%" }}
+          >
+            <div className="form-group" style={{ padding: "10px 25px" }}>
+              <label htmlFor="" className="form-label">
+                Find user
+              </label>
+              <input onChange={searchAddInputHandler} type="text" className="form-control" />
+            </div>
+            <button
+              className="c-button-unstyled c-button--medium c-button"
+              style={{ marginLeft: 25 }}
+              onClick={() => addAllUser()}
+              role="button"
+            >
+              <strong>Add all user</strong>
+            </button>
+            {users?.docs.map((doc) => {
+              let user = doc.data();
+              let checked = membersList.find((elem) => elem.uid === user.uid);
+              if (!checked)
+                return (
+                  <Member
+                    filterText = {searchAddInput.toLowerCase()}
+                    user={user}
+                    className="dropdown-item"
+                    dropdownItem={true}
+                    addUser={() => addUser(user)}
+                  />
+                );
+            })}
+          </div>
         </div>
-        {membersList.map(user => {
-            return (
-                <Member 
-                onClick = {onClick}
-                user = {user}
-                roomOwner = {roomOwner}
-                />
-            )
+        {membersList.map((user) => {
+          return <Member
+          filterText = {searchMemberInput.toLowerCase()} 
+          user={user} roomOwner={roomOwner} />;
         })}
       </div>
     </div>

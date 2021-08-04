@@ -75,16 +75,14 @@ function SidebarOption({
         });
     }
   };
-  const selectPerson = async () => {
+  const selectPerson = () => {
     dispatch(
       enterRoom({
         roomId: null,
       })
     );
 
-    if (!loading) {
-      addNewDirect();
-    }
+    addNewDirect();
 
     if (directRoom?.id) {
       dispatch(
@@ -115,13 +113,13 @@ function SidebarOption({
     }
   }, [directMessageUid, directMessageRoomId, loading]);
 
-
+  const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
   
 
 
   const roomId = useSelector(selectRoomId);
-
-  if(members?.includes(user.uid)||isUser)
+  console.log(id)
+  if(members?.includes(user.uid)||isUser||id === defaultRoomId)
   return (
     <div
       className={

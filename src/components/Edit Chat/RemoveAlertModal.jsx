@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useEffect } from 'react';
 import { useCollection } from 'react-firebase-hooks/firestore'
 import { useSelector } from 'react-redux';
 import { selectChosenUser, selectRoomDetails, selectRoomId } from '../../features/appSlice';
@@ -13,10 +14,10 @@ function RemoveAlertModal({uid}) {
     const [users, loading] = useCollection(db.collection('users'));
     const user = users?.docs.find(doc => doc.data().uid === uid);
     const title = user?.data().displayName?user?.data().displayName:user?.data().email;
-    const [successLoaded, setSuccessLoaded] = useState(false)
+    const [successLoaded, setSuccessLoaded] = useState(true)
     const removeMember = () => {
         let index = members.indexOf(selectedUser.uid);
-        if(index>-1){
+        if(index!==-1){
             membersArr?.splice(index, 1);
             db.collection('room').doc(roomId).update({
                 members: membersArr
@@ -25,7 +26,12 @@ function RemoveAlertModal({uid}) {
             })
         }
     }
-    
+    useEffect(() => {
+        return () => {
+            setSuccessLoaded(true)
+        }
+    }, [successLoaded])
+    console.log(successLoaded)
     return (
         <div className="modal fade" id="removeAlertModal" tabIndex="-1" aria-hidden="true" >
             <div className="modal-dialog">
@@ -39,7 +45,7 @@ function RemoveAlertModal({uid}) {
                     <div className="c-modal__footer">
                         <div className="footer__buttons">
                             <button className="c-button-unstyled c-button--medium" data-bs-dismiss = "modal">Cancel</button>
-                            <button className="c-button-unstyled c-button--medium danger" data-bs-dismiss = {successLoaded?"modal":""} onClick={removeMember}>Remove</button>
+                            <button className="c-button-unstyled c-button--medium danger" data-bs-dismiss = "modal" onClick={removeMember}>Remove</button>
                         </div>
                     </div>
                 </div>

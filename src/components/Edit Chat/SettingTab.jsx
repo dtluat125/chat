@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DeleteIcon from "@material-ui/icons/Delete";
 import LockIcon from "@material-ui/icons/Lock";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRoomDetails, selectRoomId, setIsModalOpen } from "../../features/appSlice";
+import { enterRoom, selectRoomDetails, selectRoomId, setIsModalOpen } from "../../features/appSlice";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import { db } from "../../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
@@ -11,8 +11,9 @@ function SettingTab() {
   const [roomDetails, loading] = useCollection(roomId&&db.collection('room').doc(roomId))
   const [isChange, setIsChange] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const isPrivate = roomDetails?.data().isPrivate;
+  const isPrivate = roomDetails?.data()?.isPrivate;
   const [noti, setNoti] = useState("");
+  const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
   console.log(isChange)
   const changeType = () => {
     setIsChange(true);
@@ -47,6 +48,9 @@ function SettingTab() {
       dispatch(setIsModalOpen({
         isModalOpen: false
       }))
+      dispatch(enterRoom({
+        roomId: defaultRoomId
+      }))
     }).catch((err) => alert(err.message));
     return () => {
       dispatch(setIsModalOpen({
@@ -56,7 +60,7 @@ function SettingTab() {
   }, [isDelete])
 
 
-
+  if(roomId !== defaultRoomId)
   return (
     <div
       class="tab-pane fade channel-details__setting"
@@ -65,7 +69,7 @@ function SettingTab() {
       aria-labelledby="setting-tab"
     >
       <div className="c-tab-group" role="button" onClick={changeType}>
-        {!roomDetails?.data().isPrivate ? (
+        {!roomDetails?.data()?.isPrivate ? (
           <>
             <LockIcon className="type-icon" />
             <span>Change to private channel</span>
@@ -79,16 +83,28 @@ function SettingTab() {
       </div>
       <hr />
 
-      <div
+      {<div
         className="c-tab-group button-delete"
+        data-bs-dismiss = "modal"
+        data-bs-target = "#removeAlertModal"
         role="button"
         onClick={deleteChannel}
       >
         <DeleteIcon className="type-icon" />
         <span>Delete this channel</span>
-      </div>
+      </div>}
     </div>
   );
+  else return (<div
+    class="tab-pane fade channel-details__setting"
+    id="setting"
+    role="tabpanel"
+    aria-labelledby="setting-tab"
+  >
+    <div className="c-tab-group">
+      This is the general room of the server so it cannot be modified
+    </div>
+   </div>)
 }
 
 export default SettingTab;

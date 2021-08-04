@@ -1,7 +1,5 @@
 .chat-details-modal{
     height: min(85vh,820px);
-    display: flex;
-    flex-direction: column;
     flex-grow: 1;
     color: rgb(29, 28, 29);
     font-size: 15px;
@@ -12,11 +10,27 @@
 }
 .c-modal__header{
     background-color: inherit;
-    padding-right: 76px;
     padding: 20px 28px;
     width: 100%;
 }
+.chat-details-modal__header{
+    background-color: inherit;
+    padding: 20px 28px;
+    width: 100%;
+    display: flex;
 
+    flex-direction: column;
+}
+.chat-details-modal__header .nav-tabs{
+    margin-top: 20px;
+    margin-bottom: -20px;
+    position: relative;
+    margin-right: auto;
+}
+.modal-body.chat-details-modal__tabs{
+    padding: 0px;
+    height: auto;
+}
 
 
 .nav-tabs .nav-item span{
@@ -33,13 +47,11 @@
 
 
 .c-modal__content__inner{
-    height: 100%;
     width: 100%;
+    height: 100%;
 }
 
 .c-modal__content{
- flex-shrink: 0 ;
- flex-grow: 1;
  width: 100%;
 }
 /* tab */
@@ -169,14 +181,21 @@
     color: rgb(1, 163, 1);
 }
 
-.channel-details__members__list .remove-button > span{
+.channel-details__members__list .interact-button > span{
     color: rgb(18, 100, 163);
     font-size: 13px;
 }
 
-.channel-details__members__list .remove-button > span:hover{
+.channel-details__members__list .interact-button > span:hover{
     border-bottom: 1px solid rgb(18, 100, 163);
     z-index: 4;
+}
+.c-button:hover{
+    background-color: rgb(209, 209, 209)!important;
+
+}
+.c-button:active{
+    opacity: 0.8;
 }
 
 /*remove Alert  modal */
@@ -203,7 +222,7 @@
     margin-left: 10px;
 }
 
-
+.c-modal__content__inner
 /* Setting tab */
 .channel-details__setting{
     padding: 20px 25px;
@@ -230,5 +249,11 @@
     background-size: cover;
     background-position: 50%;
     border-radius: 10px;
+    margin-right: 20px;
 }
 
+.c-modal__header .user-display{
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
