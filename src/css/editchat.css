@@ -257,3 +257,22 @@
     width: 100%;
     align-items: center;
 }
+/* About user tab */
+.c-tab-group__inner{
+    padding: 16px 20px;
+    user-select: text;
+}
+.c-tab-group__inner .text-line{
+    display: flex;
+}
+.text-line .text-line__icon{
+    margin-right: 10px;
+}
+.c-tab-group__inner button{
+    margin-top: 20px;
+    color: rgba(18,100,163,1);
+    font-weight: 700;
+}
+.c-tab-group__inner button:hover{
+    text-decoration: underline;
+}

@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
+  selectDirectMessageRoom,
+  selectDirectUser,
+  selectLocalTime,
   selectRoomDetails,
   selectRoomId,
   selectUser,
+  selectUserDirect,
   setIsModalOpen,
+  setSelectedUser,
+  showSecondaryWorkspace,
 } from "../../features/appSlice";
 import { db } from "../../firebase";
 import InputField from "./InputField";
-import $ from "jquery";
 import { useDispatch } from "react-redux";
-
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 function AboutTab({
   roomName,
   roomDes,
@@ -19,7 +25,7 @@ function AboutTab({
   isPrivate,
   roomMembers,
 }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [name, setName] = useState(roomName);
   const [des, setDes] = useState(roomDes ? roomDes : "");
   const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
@@ -56,13 +62,12 @@ function AboutTab({
         setChanged(true);
         setNotification("Channel was updated successfully!");
         setTimeout(() => {
-          setNotification("")
-        }, 2000)
+          setNotification("");
+        }, 2000);
       })
       .catch((err) => notification(err.message));
   };
 
-  
   // Leave channel Handle
   const user = useSelector(selectUser);
   const [alert, setAlert] = useState(false);
@@ -90,17 +95,31 @@ function AboutTab({
           members: membersArr ? membersArr : [],
         })
         .then(() => {
-          dispatch(setIsModalOpen({
-            isModalOpen: false
-          }))
+          dispatch(
+            setIsModalOpen({
+              isModalOpen: false,
+            })
+          );
         })
         .catch((err) => alert(err.message));
       console.log("success");
     }
   }, [leave]);
 
-// Direct room
-const directUserId = useSelector(select)
+  // Direct room
+  const roomDirectId = useSelector(selectDirectMessageRoom);
+  const userDirect = useSelector(selectDirectUser);
+  console.log(userDirect)
+  const localTime = useSelector(selectLocalTime);
+  // View full profile handle
+  const openSecondaryView = () => {
+    dispatch(showSecondaryWorkspace({
+      isShowingSecondaryWorkspace: true
+    }))
+    dispatch(setSelectedUser({
+      selectedUser: userDirect
+    }))
+  }
   return (
     <div
       class="tab-pane fade show active channel-details__about"
@@ -108,53 +127,77 @@ const directUserId = useSelector(select)
       role="tabpanel"
       aria-labelledby="about-tab"
     >
-      {roomId&&<>
-      <div className="input-group c-tab-group">
-        <InputField
-          fieldLabel="Name"
-          required={true}
-          hyphenized={true}
-          onChange={handleNameChange}
-          value={name}
-          disabled = {id===defaultRoomId}
-        />
-        <InputField
-          fieldLabel="Description"
-          onChange={handleDesChange}
-          value={des}
-        />
-        <br />
-        <div className="input-group__footer">
-          <button
-            className="btn btn-success c-button--medium"
-            onClick={saveChange}
-          >
-            Save
-          </button>
-          {changed ? (
-            <div className="notification badge bg-success">{notification}</div>
-          ) : (
-            <div className="notification badge bg-warning">{notification}</div>
-          )}
-        </div>
-      </div>
+      {roomDirectId && (
+        <>
+          <div className="c-tab-group">
+            <div className="c-tab-group__inner">
+              <div className="text-line">
+                <div className="text-line__icon"><AccessTimeIcon/></div>
+                <div className="text-line__content">{localTime} Local time</div>
+              </div>
+              <div className="text-line">
+                <div className="text-line__icon"><MailOutlineIcon/></div>
+                <div className="text-line__content">{userDirect?.email}</div>
+              </div>
 
-      <div className="text-group c-tab-group">
-        <div className="text-field">
-          <div className="text-field__title">Created by</div>
-          <div className="text-field__content">
-            {roomOwner ? roomOwner : "..."}
+              <button onClick={openSecondaryView} data-bs-dismiss = "modal" data-bs-target={"a" + id} className="c-button-unstyled">View full profile</button>
+            </div>
           </div>
-        </div>
+        </>
+      )}
+      {roomId && (
+        <>
+          <div className="input-group c-tab-group">
+            <InputField
+              fieldLabel="Name"
+              required={true}
+              hyphenized={true}
+              onChange={handleNameChange}
+              value={name}
+              disabled={id === defaultRoomId}
+            />
+            <InputField
+              fieldLabel="Description"
+              onChange={handleDesChange}
+              value={des}
+            />
+            <br />
+            <div className="input-group__footer">
+              <button
+                className="btn btn-success c-button--medium"
+                onClick={saveChange}
+              >
+                Save
+              </button>
+              {changed ? (
+                <div className="notification badge bg-success">
+                  {notification}
+                </div>
+              ) : (
+                <div className="notification badge bg-warning">
+                  {notification}
+                </div>
+              )}
+            </div>
+          </div>
 
-        <div className="text-field leave-button" role="button">
-          <div className="text-field__title" onClick={openAlert}>
-            Leave Channel
+          <div className="text-group c-tab-group">
+            <div className="text-field">
+              <div className="text-field__title">Created by</div>
+              <div className="text-field__content">
+                {roomOwner ? roomOwner : "..."}
+              </div>
+            </div>
+
+            <div className="text-field leave-button" role="button">
+              <div className="text-field__title" onClick={openAlert}>
+                Leave Channel
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      </>}
-      {}
+        </>
+      )}
+
       {alert && (
         <div className="c-tab-group alert">
           <span>
@@ -170,7 +213,12 @@ const directUserId = useSelector(select)
             <button className="btn btn-secondary" onClick={closeAlert}>
               Cancel
             </button>
-            <button className="btn btn-danger" data-bs-dismiss="modal" data-bs-target={"a" + id} onClick={leaveChannel}>
+            <button
+              className="btn btn-danger"
+              data-bs-dismiss="modal"
+              data-bs-target={"a" + id}
+              onClick={leaveChannel}
+            >
               Leave
             </button>
           </div>

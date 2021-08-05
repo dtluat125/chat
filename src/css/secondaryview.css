@@ -1,12 +1,14 @@
 .secondary-view-container{
     display: none;
+    
 }
 .secondary-view-container.resize{
     user-select: none;
 }
 .secondary-view-container.active{
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
-    display:block;
+    display: flex;
+    flex-direction: column;
     min-width: 200px;
     border-left: 1px solid var(--saf-0);
 }
@@ -18,9 +20,7 @@
     align-items: center;
     line-height: 1.33334;
     min-width: 300px;
-    
     box-shadow: 0 1px 0 0 var(--saf-0);
- 
     
 }
 
@@ -53,6 +53,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-y: scroll;
+    flex-grow: 10;
 }
 
 .member-profile__avatar-container{
@@ -93,6 +95,7 @@
 .member-profile__fields{
     margin-top: 16px;
     align-self: stretch;
+    flex-grow: 10;
 }
 
 .member-profile__field{
