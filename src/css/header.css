@@ -169,6 +169,11 @@
     
 }
 
+.header__search .dropdown-menu.show{
+    max-height: 500px;
+    overflow-y: auto;
+}
+
 .header__search .dropdown-item .search-icon{
     position: absolute!important;
     top: 10px;
@@ -196,3 +201,16 @@
     outline: none;
     background: inherit!important;
 }
+.dropdown-item.list-item{
+    display: flex;
+}
+
+.list-item__icon{
+    margin-right: 10px;
+    background-size: cover;
+    background-position: center;
+    height: 24px;
+    width: 24px;
+    border-radius: 5px;
+}
+/*  */

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../../css/chat.css";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
@@ -42,8 +42,7 @@ function Chat() {
   const [roomDetails, roomLoading] = useCollection(
     roomId && db.collection("room").doc(roomId)
   );
-  
-  
+
   const [roomMessages, loading] = useCollection(
     roomId &&
       db
@@ -56,9 +55,6 @@ function Chat() {
   // Direct message
   const selectedUser = useSelector(selectChosenUser);
   const roomDirectId = useSelector(selectDirectMessageRoom);
-  const [roomDirectDetails] = useCollection(
-    roomDirectId && db.collection("directRooms").doc(roomDirectId)
-  );
   const [users, usersLoading] = useCollection(db.collection("users"));
   const directUser = users?.docs.find(
     (doc) => doc.data().uid === directMessageUid
@@ -78,18 +74,6 @@ function Chat() {
   const directStatus = directUser?.data().isOnline;
   //
   // Open profile
-  const openProfile = () => {
-    dispatch(
-      setUserProfileUid({
-        userUid: directMessageUid,
-      })
-    );
-    dispatch(
-      showSecondaryWorkspace({
-        isShowingSecondaryWorkspace: true,
-      })
-    );
-  };
 
   //
   useEffect(() => {
@@ -119,7 +103,7 @@ function Chat() {
             year: year,
             month: month,
           };
-          blocksMessage[config]["timestamp"] = timestamp;
+        blocksMessage[config]["timestamp"] = timestamp;
         blocksMessage[config].push(
           <Message
             key={doc.id}
@@ -145,13 +129,12 @@ function Chat() {
           minutes = "0" + minutes;
         }
         if (!blocksMessage[config]) blocksMessage[config] = [];
-        if (!blocksMessage[config].time){
+        if (!blocksMessage[config].time) {
           blocksMessage[config]["time"] = {
             date: date,
             year: year,
             month: month,
           };
-          
         }
         blocksMessage[config]["timestamp"] = timestamp;
         blocksMessage[config].push(
@@ -172,15 +155,41 @@ function Chat() {
     if (!roomLoading) {
       dispatch(setRoomDetails({ roomDetails: roomDetails?.data() }));
     }
-  }, [roomId, roomDetails])
+  }, [roomId, roomDetails]);
   // Save user direct info
   useEffect(() => {
-    if(!usersLoading) {
-      dispatch(setDirectUser({
-        directUser: directUser?.data()
-      }))
+    if (!usersLoading) {
+      dispatch(
+        setDirectUser({
+          directUser: directUser?.data(),
+        })
+      );
     }
-  }, [roomDirectId])
+  }, [roomDirectId]);
+  // Input preveiew
+  const members = roomDetails?.data().members;
+  const membersArr = members?.slice();
+  const [join, setJoin] = useState(false)
+  const joinChat = () => {
+    setJoin(true);
+  }
+  
+  useEffect(() => {
+    if(join&&!roomLoading){
+      let membersArr = members?.slice();
+      if(!membersArr) membersArr = [];
+      membersArr.push(user.uid);
+      console.log(membersArr);
+      db.collection("room").doc(roomId).update({
+        members: membersArr
+      })
+    }
+    return () => {
+      setJoin(false)
+    }
+  }, [join, roomLoading])
+  console.log(join)
+
   return (
     <div className="chat-container">
       {loading || directLoading || usersLoading ? (
@@ -202,7 +211,7 @@ function Chat() {
                 <div
                   role="button"
                   data-bs-toggle="modal"
-                  data-bs-target={"#" + 'a' + roomDirectId}
+                  data-bs-target={"#" + "a" + roomDirectId}
                   className="chat__header__left__button"
                 >
                   <div
@@ -217,8 +226,11 @@ function Chat() {
                 </div>
               )}
             </div>
-            <div className="chat__header__right" data-bs-toggle={roomId?"modal":""}
-                  data-bs-target={roomId?"#" + "a" + roomId:""}>
+            <div
+              className="chat__header__right"
+              data-bs-toggle={roomId ? "modal" : ""}
+              data-bs-target={roomId ? "#" + "a" + roomId : ""}
+            >
               <span role="button">Details</span>
             </div>
           </div>
@@ -229,23 +241,34 @@ function Chat() {
               var timestamp = doc[1].timestamp;
               return (
                 <DayBlockMessages
-                  loading = {directLoading||loading}
+                  loading={directLoading || loading}
                   key={time.date + time.month + time.year}
                   time={time}
                   messages={doc[1]}
-                  timestamp = {timestamp}
+                  timestamp={timestamp}
                 />
               );
             })}
             <div className="chat-bottom" ref={chatRef}></div>
           </div>
           <div className="chat__footer">
-            <ChatInput
-              chatRef={chatRef}
-              channelId={roomId ? roomId : roomDirectId}
-              channelName={roomId ? roomDetails?.data()?.name : directTitle}
-              isDirect={roomId ? false : true}
-            />
+            {(members?.includes(user.uid) && roomId) || !roomId ? (
+              <ChatInput
+                chatRef={chatRef}
+                channelId={roomId ? roomId : roomDirectId}
+                channelName={roomId ? roomDetails?.data()?.name : directTitle}
+                isDirect={roomId ? false : true}
+              />
+            ) : (
+              <div className="chat__input-preview">
+                <div className="text--normal">You are viewing <strong>#{roomDetails?.data().name}</strong></div>
+                
+                <div className="buttons-group">
+                  <button className="btn btn-primary" onClick={joinChat}>Join chat</button>
+                  <button className="btn btn-secondary" data-bs-toggle="modal" data-bs-target={"#a" + roomId}>See more details</button>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

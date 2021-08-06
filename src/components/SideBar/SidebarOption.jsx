@@ -13,7 +13,7 @@ import {
   setSelectedUser,
 } from "../../features/appSlice";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import LockIcon from '@material-ui/icons/Lock';
+import LockIcon from "@material-ui/icons/Lock";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../firebase";
 
@@ -28,7 +28,7 @@ function SidebarOption({
   isUser,
   usersHaveReadRoom,
   isPrivate,
-  members
+  members,
 }) {
   const dispatch = useDispatch();
   const seeAllDm = () => {};
@@ -91,9 +91,7 @@ function SidebarOption({
           directMessageRoomId: directRoom?.id,
         })
       );
-      dispatch(setSelectedUser({
-
-      }))
+      dispatch(setSelectedUser({}));
       db.collection("directRooms")
         .doc(directRoom.id)
         .update({
@@ -101,7 +99,6 @@ function SidebarOption({
             ? usersHaveRead.concat(user.uid)
             : [userUid],
         });
-       
     }
   };
   // Handle send message button
@@ -114,58 +111,63 @@ function SidebarOption({
   }, [directMessageUid, directMessageRoomId, loading]);
 
   const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
-  
-
 
   const roomId = useSelector(selectRoomId);
-  console.log(id)
-  if(members?.includes(user.uid)||isUser||id === defaultRoomId)
-  return (
-    <div
-      className={
-        roomId === id || directMessageUid === uid
-          ? "sidebar__option-container active"
-          : "sidebar__option-container"
-      }
-      tabIndex="1"
-      role="button"
-      onClick={id && !isUser ? selectChannel : isUser ? selectPerson : seeAllDm}
-    >
-      {icon && <div className="sidebar__icon">{icon}</div>}
-      {icon ? (
-        <div className="sidebar__option__title">{title}</div>
-      ) : (
-        <div className="sidebar__option__channel">
-          {!isUser ? (!isPrivate?
-            <span>#</span>:<LockIcon/>
-          ) : photoURL ? (
-            <img src={photoURL} alt="avatar" />
-          ) : (
-            <img src="default-avatar.jpg" alt="avatar" />
-          )}
-          <FiberManualRecordIcon
-            className={
-              isUser
-                ? isOnline
-                  ? "status online"
-                  : "status offline"
-                : "no-status"
-            }
-          />
-          {title ? title : email}
-        </div>
-      )}
-      {!(
-        usersHaveRead?.includes(userUid) || usersHaveReadRoom?.includes(userUid)
-      ) &&
-        !icon && (
-          <span class="position-absolute  translate-middle p-1 bg-danger border border-light rounded-circle unread-notification">
-            <span class="visually-hidden">New alerts</span>
-          </span>
+  console.log(id);
+  if (members?.includes(user.uid) || isUser || id === defaultRoomId)
+    return (
+      <div
+        className={
+          roomId === id || directMessageUid === uid
+            ? "sidebar__option-container active"
+            : "sidebar__option-container"
+        }
+        tabIndex="1"
+        role="button"
+        onClick={
+          id && !isUser ? selectChannel : isUser ? selectPerson : seeAllDm
+        }
+      >
+        {icon && <div className="sidebar__icon">{icon}</div>}
+        {icon ? (
+          <div className="sidebar__option__title">{title}</div>
+        ) : (
+          <div className="sidebar__option__channel">
+            {!isUser ? (
+              !isPrivate ? (
+                <span>#</span>
+              ) : (
+                <LockIcon />
+              )
+            ) : photoURL ? (
+              <img src={photoURL} alt="avatar" />
+            ) : (
+              <img src="default-avatar.jpg" alt="avatar" />
+            )}
+            <FiberManualRecordIcon
+              className={
+                isUser
+                  ? isOnline
+                    ? "status online"
+                    : "status offline"
+                  : "no-status"
+              }
+            />
+            {title ? title : email}
+          </div>
         )}
-    </div>
-  );
-  else return (<div/>)
+        {!(
+          usersHaveRead?.includes(userUid) ||
+          usersHaveReadRoom?.includes(userUid)
+        ) &&
+          !icon && (
+            <span class="position-absolute  translate-middle p-1 bg-danger border border-light rounded-circle unread-notification">
+              <span class="visually-hidden">New alerts</span>
+            </span>
+          )}
+      </div>
+    );
+  else return <div />;
 }
 
 export default SidebarOption;

@@ -330,3 +330,14 @@
     top: -1px;
     position: relative;
 }
+/* Chat-input previewer */
+.chat__input-preview{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttons-group .btn{
+    margin-right: 20px;
+}
