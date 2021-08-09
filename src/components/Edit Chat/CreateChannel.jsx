@@ -6,6 +6,7 @@ import { selectUser } from "../../features/appSlice";
 import { db } from "../../firebase";
 import SmallLoader from "../SmallLoader";
 import InputField from "./InputField";
+import firebase from "firebase";
 function CreateChannel() {
   const user = useSelector(selectUser);
   const [users, loading] = useCollection(db.collection("users"));
@@ -52,7 +53,18 @@ function CreateChannel() {
             members: checked ? [user.uid] : uids,
             roomOwner: user,
           })
-          .then((e) => {
+          .then((doc) => {
+            let input = doc.data().des;
+            db.collection("room")
+              .doc(doc.id)
+              .collection("messages")
+              .add({
+                message: input,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                user: `You’ve found the #${doc.data().name} channel,`,
+                userImage:
+                  "https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg",
+              });
             setNotification("Room was created successfully");
             setAdded(true);
           })
@@ -124,7 +136,10 @@ function CreateChannel() {
                     <div className="channel-type-des__body c-gray-text">
                       {checked && (
                         <>
-                          <strong>Private Channel cannot be accessed from outsiders</strong>.
+                          <strong>
+                            Private Channel cannot be accessed from outsiders
+                          </strong>
+                          .
                         </>
                       )}
                       {!checked &&

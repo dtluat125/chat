@@ -5,10 +5,13 @@ import Member from "./Member";
 import SearchIcon from "@material-ui/icons/Search";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import { useState } from "react";
+import firebase from "firebase";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/appSlice";
 function MembersTab({ roomMembers, roomOwner, id }) {
   const [users, loading] = useCollection(db.collection("users"));
-
-  let membersList = []
+  let userInf = useSelector(selectUser)
+  let membersList = [];
   users?.docs.map((doc) => {
     if (roomMembers?.includes(doc.data().uid)) {
       membersList.push(doc.data());
@@ -19,8 +22,7 @@ function MembersTab({ roomMembers, roomOwner, id }) {
   const [isAdded, setIsAdded] = useState(false);
   let membersArr = roomMembers?.slice();
   const addUser = (user) => {
-    console.log(id);
-    if (user && roomMembers) {
+    if (user && roomMembers&& !membersArr.includes(user?.uid)) {
       membersArr.push(user.uid);
       db.collection("room")
         .doc(id)
@@ -28,7 +30,14 @@ function MembersTab({ roomMembers, roomOwner, id }) {
           members: membersArr,
         })
         .then((data) => {
-          console.log(data);
+          let input = `is added by ${userInf?.displayName}.`;
+          db.collection("room").doc(id).collection("messages").add({
+            message: input,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            user: user.displayName,
+            userImage: user.photoURL,
+            uid: user.uid,
+          });
           setIsAdded(true);
         });
     }
@@ -38,28 +47,19 @@ function MembersTab({ roomMembers, roomOwner, id }) {
     console.log(users);
     if (users && roomMembers) {
       users?.docs.map((doc) => {
-        membersArr.push(doc.data().uid);
+        addUser(doc.data())
       });
-      db.collection("room")
-        .doc(id)
-        .update({
-          members: membersArr,
-        })
-        .then((data) => {
-          console.log(data);
-          setIsAdded(true);
-        });
     }
   };
 
   // Handle Search Member
   const [searchMemberInput, setSearchMemberInput] = useState("");
-  const [searchAddInput, setSearchAddInput] = useState("")
+  const [searchAddInput, setSearchAddInput] = useState("");
   const searchMemberInputHandler = (e) => {
     setSearchMemberInput(e.target.value);
   };
   const searchAddInputHandler = (e) => {
-    setSearchAddInput(e.target.value)
+    setSearchAddInput(e.target.value);
   };
   return (
     <div
@@ -109,7 +109,11 @@ function MembersTab({ roomMembers, roomOwner, id }) {
               <label htmlFor="" className="form-label">
                 Find user
               </label>
-              <input onChange={searchAddInputHandler} type="text" className="form-control" />
+              <input
+                onChange={searchAddInputHandler}
+                type="text"
+                className="form-control"
+              />
             </div>
             <button
               className="c-button-unstyled c-button--medium c-button"
@@ -125,7 +129,7 @@ function MembersTab({ roomMembers, roomOwner, id }) {
               if (!checked)
                 return (
                   <Member
-                    filterText = {searchAddInput.toLowerCase()}
+                    filterText={searchAddInput.toLowerCase()}
                     user={user}
                     className="dropdown-item"
                     dropdownItem={true}
@@ -136,9 +140,13 @@ function MembersTab({ roomMembers, roomOwner, id }) {
           </div>
         </div>
         {membersList.map((user) => {
-          return <Member
-          filterText = {searchMemberInput.toLowerCase()} 
-          user={user} roomOwner={roomOwner} />;
+          return (
+            <Member
+              filterText={searchMemberInput.toLowerCase()}
+              user={user}
+              roomOwner={roomOwner}
+            />
+          );
         })}
       </div>
     </div>

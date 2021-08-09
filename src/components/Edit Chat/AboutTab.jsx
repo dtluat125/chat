@@ -16,7 +16,8 @@ import { db } from "../../firebase";
 import InputField from "./InputField";
 import { useDispatch } from "react-redux";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import firebase from "firebase";
 function AboutTab({
   roomName,
   roomDes,
@@ -81,6 +82,7 @@ function AboutTab({
   };
   const leaveChannel = () => {
     setLeave(true);
+    setAlert(false);
   };
   const roomId = useSelector(selectRoomId);
   var membersArr = roomMembers?.slice();
@@ -103,23 +105,35 @@ function AboutTab({
         })
         .catch((err) => alert(err.message));
       console.log("success");
+      let input = `Leave #${roomName}.`;
+      db.collection("room").doc(roomId).collection("messages").add({
+        message: input,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        user: user.displayName,
+        userImage: user.photoURL,
+        uid: user.uid,
+      });
     }
   }, [leave]);
 
   // Direct room
   const roomDirectId = useSelector(selectDirectMessageRoom);
   const userDirect = useSelector(selectDirectUser);
-  console.log(userDirect)
+  console.log(userDirect);
   const localTime = useSelector(selectLocalTime);
   // View full profile handle
   const openSecondaryView = () => {
-    dispatch(showSecondaryWorkspace({
-      isShowingSecondaryWorkspace: true
-    }))
-    dispatch(setSelectedUser({
-      selectedUser: userDirect
-    }))
-  }
+    dispatch(
+      showSecondaryWorkspace({
+        isShowingSecondaryWorkspace: true,
+      })
+    );
+    dispatch(
+      setSelectedUser({
+        selectedUser: userDirect,
+      })
+    );
+  };
   return (
     <div
       class="tab-pane fade show active channel-details__about"
@@ -132,15 +146,26 @@ function AboutTab({
           <div className="c-tab-group">
             <div className="c-tab-group__inner">
               <div className="text-line">
-                <div className="text-line__icon"><AccessTimeIcon/></div>
+                <div className="text-line__icon">
+                  <AccessTimeIcon />
+                </div>
                 <div className="text-line__content">{localTime} Local time</div>
               </div>
               <div className="text-line">
-                <div className="text-line__icon"><MailOutlineIcon/></div>
+                <div className="text-line__icon">
+                  <MailOutlineIcon />
+                </div>
                 <div className="text-line__content">{userDirect?.email}</div>
               </div>
 
-              <button onClick={openSecondaryView} data-bs-dismiss = "modal" data-bs-target={"a" + id} className="c-button-unstyled">View full profile</button>
+              <button
+                onClick={openSecondaryView}
+                data-bs-dismiss="modal"
+                data-bs-target={"a" + id}
+                className="c-button-unstyled"
+              >
+                View full profile
+              </button>
             </div>
           </div>
         </>

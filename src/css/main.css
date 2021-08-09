@@ -34,7 +34,7 @@
   }
   @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
   .App{
-    min-height: 100vh;
+    height: 100vh;
   }
 
   @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@1,300&family=Montserrat&display=swap');
@@ -47,14 +47,17 @@
     height: 100%;
   }
   .work-space-body{
-    position: fixed;
     display: flex;
-    height: 100%;
     width: 100%;
-    
+    align-items: stretch;
+    flex-grow: 1;
+    height: calc(100% - 38px);
   }
 
-
+  .App{
+    display: flex;
+    flex-direction: column;
+  }
   /* Custom Scrollbar  */
   ::-webkit-scrollbar {
     width: 6px;

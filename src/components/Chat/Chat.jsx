@@ -21,7 +21,7 @@ import ChatInput from "./ChatInput";
 import Message from "./Message";
 import SmallLoader from "../SmallLoader";
 import DayBlockMessages from "./DayBlockMessages";
-import EditChat from "../Edit Chat/EditChat";
+import firebase from "firebase";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -74,7 +74,6 @@ function Chat() {
   const directStatus = directUser?.data().isOnline;
   //
   // Open profile
-
   //
   useEffect(() => {
     chatRef?.current?.scrollIntoView({
@@ -169,26 +168,37 @@ function Chat() {
   // Input preveiew
   const members = roomDetails?.data().members;
   const membersArr = members?.slice();
-  const [join, setJoin] = useState(false)
+  const [join, setJoin] = useState(false);
   const joinChat = () => {
     setJoin(true);
-  }
-  
+  };
+
   useEffect(() => {
-    if(join&&!roomLoading){
+    if (join && !roomLoading) {
       let membersArr = members?.slice();
-      if(!membersArr) membersArr = [];
+      if (!membersArr) membersArr = [];
       membersArr.push(user.uid);
       console.log(membersArr);
-      db.collection("room").doc(roomId).update({
-        members: membersArr
-      })
+      db.collection("room")
+        .doc(roomId)
+        .update({
+          members: membersArr,
+        })
+        .then(() => {
+          let input = `joined #${roomDetails.data().name}.`;
+          db.collection("room").doc(roomId).collection("messages").add({
+            message: input,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            user: user.displayName,
+            userImage: user.photoURL,
+            uid: user.uid,
+          });
+        });
     }
     return () => {
-      setJoin(false)
-    }
-  }, [join, roomLoading])
-  console.log(join)
+      setJoin(false);
+    };
+  }, [join, roomLoading]);
 
   return (
     <div className="chat-container">
@@ -239,8 +249,10 @@ function Chat() {
             {blocksMessageArr?.map((doc) => {
               var time = doc[1].time;
               var timestamp = doc[1].timestamp;
+              var randomUid = (doc[1][0]?.props.uid);
               return (
                 <DayBlockMessages
+                  uid = {randomUid}
                   loading={directLoading || loading}
                   key={time.date + time.month + time.year}
                   time={time}
@@ -261,14 +273,25 @@ function Chat() {
               />
             ) : (
               <div className="chat__input-preview">
-                <div className="text--normal">You are viewing <strong>#{roomDetails?.data().name}</strong></div>
-                
+                <div className="text--normal">
+                  You are viewing <strong>#{roomDetails?.data().name}</strong>
+                </div>
+
                 <div className="buttons-group">
-                  <button className="btn btn-primary" onClick={joinChat}>Join chat</button>
-                  <button className="btn btn-secondary" data-bs-toggle="modal" data-bs-target={"#a" + roomId}>See more details</button>
+                  <button className="btn btn-primary" onClick={joinChat}>
+                    Join chat
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target={"#a" + roomId}
+                  >
+                    See more details
+                  </button>
                 </div>
               </div>
             )}
+            <div className="space"></div>
           </div>
         </>
       )}

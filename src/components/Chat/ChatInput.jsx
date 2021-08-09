@@ -3,11 +3,14 @@ import { db } from '../../firebase';
 import firebase from 'firebase';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/appSlice';
+import SendIcon from '@material-ui/icons/Send';
 function ChatInput({channelName, channelId, chatRef, isDirect}) {
     const user = useSelector(selectUser);
     const [input, setInput] = useState("");
     const sendMessage = (e) => {
         e.preventDefault();
+        if(input!=""){
+       
         if(!channelId) return false;
         if(!isDirect){
         db.collection("room").doc(channelId).collection("messages").add({
@@ -32,7 +35,7 @@ function ChatInput({channelName, channelId, chatRef, isDirect}) {
                 usersHaveRead: [user.uid]
             })
         }
-        setInput("")
+        setInput("")}
     }
     chatRef?.current?.scrollIntoView({
         behavior:"smooth"
@@ -45,7 +48,7 @@ function ChatInput({channelName, channelId, chatRef, isDirect}) {
         <div className="chat-input-container">
             <form >
                 <input value={input} type="text" onChange={inputChangeHandler} placeholder={`Message #${channelName}`} />
-                <button onClick={(e) => sendMessage(e)} type="submit">Send</button>
+                <button onClick={(e) => sendMessage(e)} type="submit" className="c-button-unstyled send-button"><SendIcon/></button>
             </form>
         </div>
     )

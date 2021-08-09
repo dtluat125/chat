@@ -1,10 +1,11 @@
 import React from "react";
 
-function DayBlockMessages({ time, messages, loading, timestamp }) {
+function DayBlockMessages({ time, messages, uid, timestamp }) {
+
   return (
     <div className="day-block-messages__container">
 
-          {timestamp&&(
+          {(timestamp||!uid)&&(
             <div className="day-block-messages__divider">
               <div className="day-block-messages__divider-line"></div>
               <div className="day-block-messages__label">

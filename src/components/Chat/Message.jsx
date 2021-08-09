@@ -71,7 +71,7 @@ function Message({ userName, userImage, message, timestamp, uid }) {
       })
     );
   }, [userUid, loading]);
-
+  const doNothing = () => {}
   return (
     <div
       className={onHover ? "message-container active" : "message-container"}
@@ -84,8 +84,8 @@ function Message({ userName, userImage, message, timestamp, uid }) {
             style={{ backgroundImage: `url(${userImage})` }}
             alt=""
             role="button"
-            onClick={sendUserUid}
-            data-bs-toggle="modal"
+            onClick={uid?sendUserUid:doNothing}
+            data-bs-toggle={uid?"modal":"false"}
             data-bs-target="#profileModal"
             className="message__avatar"
           />
@@ -94,8 +94,8 @@ function Message({ userName, userImage, message, timestamp, uid }) {
             <div className="status">
               <a
                 role="button"
-                onClick={sendUserUid}
-                data-bs-toggle="modal"
+                onClick={uid?sendUserUid:doNothing}
+                data-bs-toggle={uid?"modal":"false"}
                 data-bs-target="#profileModal"
               >
                 {displayName}

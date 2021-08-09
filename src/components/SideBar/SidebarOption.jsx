@@ -4,18 +4,16 @@ import {
   enterDirectMessage,
   enterRoom,
   selectDirectMessageRoom,
-  selectMessageSend,
   selectRoomId,
   selectUser,
   selectUserDirect,
-  selectUserProfileUid,
-  sendMessage,
   setSelectedUser,
 } from "../../features/appSlice";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import LockIcon from "@material-ui/icons/Lock";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../firebase";
+import firebase from "firebase";
 
 function SidebarOption({
   icon,
@@ -47,10 +45,22 @@ function SidebarOption({
   });
   const usersHaveRead = directRoom?.data().usersHaveRead;
   const addNewDirect = async () => {
-    if (!directRoom && uid) {
-      await db.collection("directRooms").add({
-        uids: [userUid, uid],
-      });
+    if (!directRoom && uid && !loading) {
+      await db
+        .collection("directRooms")
+        .add({
+          uids: [userUid, uid],
+        })
+        .then((doc) => {
+          let input = `Here you can send messages and share files with #${title}.`;
+          db.collection("directRooms").doc(doc.id).collection("messages").add({
+            message: input,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            user: "This conversation is just between the two of you",
+            userImage:
+              "https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg",
+          });
+        });
       console.log("added!");
     }
   };
@@ -82,8 +92,6 @@ function SidebarOption({
       })
     );
 
-    addNewDirect();
-
     if (directRoom?.id) {
       dispatch(
         enterDirectMessage({
@@ -104,7 +112,8 @@ function SidebarOption({
   // Handle send message button
 
   useEffect(() => {
-    if (!loading && directMessageUid === uid && directRoom.id) {
+    addNewDirect();
+    if (!loading && directMessageUid === uid && directRoom?.id) {
       selectPerson();
       console.log("updated");
     }
@@ -113,7 +122,6 @@ function SidebarOption({
   const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
 
   const roomId = useSelector(selectRoomId);
-  console.log(id);
   if (members?.includes(user.uid) || isUser || id === defaultRoomId)
     return (
       <div
