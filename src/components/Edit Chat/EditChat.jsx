@@ -27,7 +27,6 @@ function EditChat({ id, roomDetails, directUser, onClick }) {
   const photoURL = directUser?.photoURL
     ? directUser.photoURL
     : "default-avatar.jpg";
-  console.log(userName);
   return (
     <div className="modal fade" id={"a" + id} tabIndex="-1" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">

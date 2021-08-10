@@ -53,7 +53,6 @@ function Chat() {
   );
 
   // Direct message
-  const selectedUser = useSelector(selectChosenUser);
   const roomDirectId = useSelector(selectDirectMessageRoom);
   const [users, usersLoading] = useCollection(db.collection("users"));
   const directUser = users?.docs.find(
@@ -67,11 +66,11 @@ function Chat() {
         .collection("messages")
         .orderBy("timestamp", "asc")
   );
-  const directTitle = directUser?.data().displayName
+  const directTitle = directUser?.data()?.displayName
     ? directUser?.data().displayName
     : directUser?.data().email;
-  const directImg = directUser?.data().photoURL;
-  const directStatus = directUser?.data().isOnline;
+  const directImg = directUser?.data()?.photoURL;
+  const directStatus = directUser?.data()?.isOnline;
   //
   // Open profile
   //
@@ -166,7 +165,7 @@ function Chat() {
     }
   }, [roomDirectId]);
   // Input preveiew
-  const members = roomDetails?.data().members;
+  const members = roomDetails?.data()?.members;
   const membersArr = members?.slice();
   const [join, setJoin] = useState(false);
   const joinChat = () => {
@@ -246,6 +245,12 @@ function Chat() {
           </div>
 
           <div className="chat-messages">
+            <Message
+            userImage="https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg"
+            userName = {roomId?((roomDetails?.data()?.roomOwner?roomDetails?.data()?.roomOwner.displayName:"...") + ` founded the #${roomDetails?.data()?.name} channel,`):"This conversation is just between the two of you"}
+            message = {roomId?roomDetails?.data()?.des?roomDetails?.data()?.des:"":`Here you can send messages and share files with @${directUser?.data().displayName}.`}
+            description = {true}
+            />
             {blocksMessageArr?.map((doc) => {
               var time = doc[1].time;
               var timestamp = doc[1].timestamp;
@@ -274,7 +279,7 @@ function Chat() {
             ) : (
               <div className="chat__input-preview">
                 <div className="text--normal">
-                  You are viewing <strong>#{roomDetails?.data().name}</strong>
+                  You are viewing <strong>#{roomDetails?.data()?.name}</strong>
                 </div>
 
                 <div className="buttons-group">

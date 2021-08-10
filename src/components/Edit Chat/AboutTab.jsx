@@ -89,7 +89,6 @@ function AboutTab({
   var index = membersArr?.indexOf(user.uid);
   membersArr?.splice(index, 1);
   useEffect(() => {
-    console.log(leave);
     if (leave) {
       db.collection("room")
         .doc(roomId)
@@ -104,7 +103,6 @@ function AboutTab({
           );
         })
         .catch((err) => alert(err.message));
-      console.log("success");
       let input = `Leave #${roomName}.`;
       db.collection("room").doc(roomId).collection("messages").add({
         message: input,
@@ -119,7 +117,6 @@ function AboutTab({
   // Direct room
   const roomDirectId = useSelector(selectDirectMessageRoom);
   const userDirect = useSelector(selectDirectUser);
-  console.log(userDirect);
   const localTime = useSelector(selectLocalTime);
   // View full profile handle
   const openSecondaryView = () => {

@@ -3,6 +3,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 import {
   enterDirectMessage,
+  selectRoomId,
   selectUser,
   selectUserProfileUid,
   setSelectedUser,
@@ -12,10 +13,11 @@ import {
 import { db } from "../../firebase";
 import ProfileModal from "./ProfileModal";
 
-function Message({ userName, userImage, message, timestamp, uid }) {
+function Message({ userName, userImage, message, timestamp, uid, description }) {
   const userInf = useSelector(selectUser);
   const displayName = userInf?.uid === uid ? "You" : userName;
   const [onHover, setOnHover] = useState(false);
+  const roomId = useSelector(selectRoomId)
 
   // Save selected user Info
 
@@ -72,13 +74,14 @@ function Message({ userName, userImage, message, timestamp, uid }) {
     );
   }, [userUid, loading]);
   const doNothing = () => {}
+  console.log("Name: " + userName)
   return (
     <div
       className={onHover ? "message-container active" : "message-container"}
       onMouseOver={hoverHandler}
       onMouseOut={notHoverHandler}
     >
-      {timestamp && (
+      {(timestamp||(description)) && (
         <>
           <div
             style={{ backgroundImage: `url(${userImage})` }}
@@ -98,9 +101,9 @@ function Message({ userName, userImage, message, timestamp, uid }) {
                 data-bs-toggle={uid?"modal":"false"}
                 data-bs-target="#profileModal"
               >
-                {displayName}
+                {description?userName:displayName}
               </a>{" "}
-              <span>{localTime}</span>
+              <span>{description?"":localTime}</span>
             </div>
             <p className="message">{message}</p>
           </div>

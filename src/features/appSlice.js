@@ -17,6 +17,7 @@ export const appSlice = createSlice({
         roomDetails: null,
         directUser: null,
         isModalOpen: null,
+        moves: []
     },
     reducers: {
         enterRoom: (state, action) =>{
@@ -39,7 +40,14 @@ export const appSlice = createSlice({
             state.directMessageUid= action.payload.initState;
             state.isShowingSecondaryWorkspace = action.payload.initState;
             state.docUserId = action.payload.initState;
-            state.directMessageRoomId = action.payload.initState
+            state.directMessageRoomId = action.payload.initState;
+            state.selectedUser = null;
+            state.localTime = null;
+            state.roomDetails = null;
+            state.directUser = null;
+            state.isModalOpen = null;
+            state.moves = [];
+
         },
         getDataState: (state, action) => {
             state.dataUpdated = action.payload.dataUpdated;
@@ -61,21 +69,24 @@ export const appSlice = createSlice({
             state.messageSend = action.payload.messageSend;
         },
         setTime: (state, action) => {
-            state.localTime = action.payload.localTime
+            state.localTime = action.payload.localTime;
         },
         setRoomDetails: (state, action) => {
-            state.roomDetails = action.payload.roomDetails
+            state.roomDetails = action.payload.roomDetails;
         },
         setDirectUser: (state, action) => {
             state.directUser = action.payload.directUser
         },
         setIsModalOpen: (state, action) => {
             state.isModalOpen = action.payload.isModalOpen
+        },
+        setMoves: (state, action) => {
+            state.moves = action.payload.moves
         }
      }
 });
 
-export const {setIsModalOpen, setDirectUser, setRoomDetails, setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
+export const {setMoves, setIsModalOpen, setDirectUser, setRoomDetails, setTime, sendMessage, setSelectedUser, showSecondaryWorkspace,enterRoom, saveUserInfo, docUserId, reset, getDataState, enterDirectMessage, setUserProfileUid} = appSlice.actions;
 
 export const selectRoomId = state => state.app.roomId;
 
@@ -104,4 +115,6 @@ export const selectRoomDetails = state => state.app.roomDetails
 export const selectDirectUser = state => state.app.directUser
 
 export const selectModalState = state => state.app.isModalOpen
+
+export const selectMoves = state => state.app.moves
 export default appSlice.reducer;

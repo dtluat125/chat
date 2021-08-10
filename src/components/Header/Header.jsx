@@ -12,11 +12,13 @@ import {
   reset,
   saveUserInfo,
   selectDocId,
+  selectMoves,
   selectUser,
   setUserProfileUid,
   showSecondaryWorkspace,
 } from "../../features/appSlice";
 import DropdownSearchMenu from "./DropdownSearchMenu";
+import DropdownMove from "./DropdownMove";
 
 function Header() {
   const userInf = useSelector(selectUser);
@@ -56,6 +58,8 @@ function Header() {
       })
     );
   };
+  // Get Moves
+  const moves = useSelector(selectMoves);
   return (
     <div className="header-container">
       {/* Header Left */}
@@ -75,15 +79,11 @@ function Header() {
             <div aria-hidden="true" className="c-menu_item__header">
               Recent
             </div>
-            <Dropdown.Item className="dropdown-item" href="#">
-              Action
-            </Dropdown.Item>
-            <Dropdown.Item className="dropdown-item" href="#">
-              Another action
-            </Dropdown.Item>
-            <Dropdown.Item className="dropdown-item" href="#">
-              Something else here
-            </Dropdown.Item>
+            {moves?.map((id) => {
+              return (
+                <DropdownMove id = {id}/>
+              )
+            })}
           </Dropdown.Menu>
         </Dropdown>
       </div>

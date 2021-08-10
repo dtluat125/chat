@@ -213,4 +213,17 @@
     width: 24px;
     border-radius: 5px;
 }
-/*  */
+/* Dropdown Move */
+.dropdown-item.moves-item {
+    display: flex!important;
+}
+
+.dropdown-item .move__symbol{
+    height: 24px;
+    width: 24px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 5px;
+    margin-right: 5px;
+    text-align: center;
+}

@@ -44,7 +44,6 @@ function MembersTab({ roomMembers, roomOwner, id }) {
   };
 
   const addAllUser = () => {
-    console.log(users);
     if (users && roomMembers) {
       users?.docs.map((doc) => {
         addUser(doc.data())

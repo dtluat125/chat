@@ -4,9 +4,11 @@ import {
   enterDirectMessage,
   enterRoom,
   selectDirectMessageRoom,
+  selectMoves,
   selectRoomId,
   selectUser,
   selectUserDirect,
+  setMoves,
   setSelectedUser,
 } from "../../features/appSlice";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
@@ -14,6 +16,7 @@ import LockIcon from "@material-ui/icons/Lock";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../firebase";
 import firebase from "firebase";
+
 
 function SidebarOption({
   icon,
@@ -35,6 +38,8 @@ function SidebarOption({
   const user = useSelector(selectUser);
   const userUid = user?.uid;
   const [directRooms, loading] = useCollection(db.collection("directRooms"));
+  const [users] = useCollection(db.collection('users'));
+  const [toggle, setToggle] = useState(false);
   const directRoom = directRooms?.docs.find((doc) => {
     if (uid === userUid)
       return (
@@ -43,6 +48,7 @@ function SidebarOption({
       );
     return doc.data().uids.includes(userUid) && doc.data().uids.includes(uid);
   });
+  
   const usersHaveRead = directRoom?.data().usersHaveRead;
   const addNewDirect = async () => {
     if (!directRoom && uid && !loading) {
@@ -52,14 +58,9 @@ function SidebarOption({
           uids: [userUid, uid],
         })
         .then((doc) => {
-          let input = `Here you can send messages and share files with #${title}.`;
-          db.collection("directRooms").doc(doc.id).collection("messages").add({
-            message: input,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            user: "This conversation is just between the two of you",
-            userImage:
-              "https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg",
-          });
+          db.collection("directRooms").doc(doc.id).update({
+            users: [users?.docs.find(doc => doc.data().uid === userUid)?.data(), users?.docs.find(doc => doc.data().uid === uid)?.data()]
+          })
         });
       console.log("added!");
     }
@@ -86,6 +87,7 @@ function SidebarOption({
     }
   };
   const selectPerson = () => {
+    setToggle(true)
     dispatch(
       enterRoom({
         roomId: null,
@@ -112,16 +114,37 @@ function SidebarOption({
   // Handle send message button
 
   useEffect(() => {
+    if(toggle)
     addNewDirect();
     if (!loading && directMessageUid === uid && directRoom?.id) {
       selectPerson();
       console.log("updated");
+    }
+    return() => {
+      setToggle(false)
     }
   }, [directMessageUid, directMessageRoomId, loading]);
 
   const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
 
   const roomId = useSelector(selectRoomId);
+  // Save moves
+  let moves = useSelector(selectMoves);
+  const addMoves = (id) =>{
+    let newMoves = moves?.filter((a) => {
+      return a != id;
+    })
+    newMoves.unshift(id);
+    dispatch(setMoves({
+      moves: newMoves
+    }))
+  }
+  useEffect(() => {
+    addMoves(roomId?roomId:directMessageRoomId)
+    
+  }, [roomId, directMessageUid])
+
+  // 
   if (members?.includes(user.uid) || isUser || id === defaultRoomId)
     return (
       <div

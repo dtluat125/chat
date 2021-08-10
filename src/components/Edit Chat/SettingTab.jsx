@@ -14,7 +14,6 @@ function SettingTab() {
   const isPrivate = roomDetails?.data()?.isPrivate;
   const [noti, setNoti] = useState("");
   const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
-  console.log(isChange)
   const changeType = () => {
     setIsChange(true);
   };
@@ -42,6 +41,8 @@ function SettingTab() {
       }
   }, [isChange]);
 
+  console.log("Delete channel: "+ isDelete);
+
   useEffect(() => {
     if(isDelete)
     db.collection('room').doc(roomId).delete().then(() => {
@@ -53,12 +54,9 @@ function SettingTab() {
       }))
     }).catch((err) => alert(err.message));
     return () => {
-      dispatch(setIsModalOpen({
-        isModalOpen: null
-      }))
+      setIsDelete(false)
     }
   }, [isDelete])
-
 
   if(roomId !== defaultRoomId)
   return (

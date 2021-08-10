@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import "../../css/createchannel.css";
@@ -10,6 +10,7 @@ import firebase from "firebase";
 function CreateChannel() {
   const user = useSelector(selectUser);
   const [users, loading] = useCollection(db.collection("users"));
+  const [channels, channelLoading] = useCollection(db.collection("room"))
   let uids = [];
   users?.docs.map((doc) => uids.push(doc.data().uid));
   const [toggle, setToggle] = useState(false);
@@ -18,8 +19,9 @@ function CreateChannel() {
   const [des, setDes] = useState("");
   const [notification, setNotification] = useState("");
   const [added, setAdded] = useState(false);
+  const [isExist, setIsExist] = useState(false);
   const handleToggle = () => {
-    setToggle(!toggle);
+    setToggle(true);
   };
 
   const handleSwitch = () => {
@@ -39,12 +41,11 @@ function CreateChannel() {
 
   const addChannel = async () => {
     if (!loading) {
-      const isExist = await checkExist();
       if (name === "") {
         setNotification("Please enter the channel name");
         return;
       }
-      if (isExist === false) {
+      if (!isExist) {
         db.collection("room")
           .add({
             name: name,
@@ -54,17 +55,6 @@ function CreateChannel() {
             roomOwner: user,
           })
           .then((doc) => {
-            let input = doc.data().des;
-            db.collection("room")
-              .doc(doc.id)
-              .collection("messages")
-              .add({
-                message: input,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                user: `You’ve found the #${doc.data().name} channel,`,
-                userImage:
-                  "https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg",
-              });
             setNotification("Room was created successfully");
             setAdded(true);
           })
@@ -77,13 +67,25 @@ function CreateChannel() {
     }
   };
 
-  const checkExist = () => {
-    if (!loading) {
-      let doc = users.docs.find((elem) => elem.data().name === name);
-      if (doc) return true;
-      else return false;
+  useEffect(() => {
+    if (!channelLoading) {
+      let doc = channels?.docs?.find((elem) => elem.data().name === name);
+      console.log(doc)
+      if (doc) setIsExist(true);
     }
-  };
+    if (toggle) {
+      addChannel();
+    }
+    return () => {
+      if (toggle) {
+        setName("");
+        setDes("");
+      }
+      setIsExist(false);
+      setToggle(false);
+    };
+  }, [channelLoading, name, toggle]);
+
   return (
     <div
       className="modal fade"
@@ -163,7 +165,7 @@ function CreateChannel() {
               <div className="create-channel__footer">
                 <button
                   className="btn btn-success c-button--medium"
-                  onClick={addChannel}
+                  onClick={handleToggle}
                 >
                   Create
                 </button>
