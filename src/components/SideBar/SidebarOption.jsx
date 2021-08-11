@@ -17,7 +17,6 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { db } from "../../firebase";
 import firebase from "firebase";
 
-
 function SidebarOption({
   icon,
   title,
@@ -38,7 +37,7 @@ function SidebarOption({
   const user = useSelector(selectUser);
   const userUid = user?.uid;
   const [directRooms, loading] = useCollection(db.collection("directRooms"));
-  const [users] = useCollection(db.collection('users'));
+  const [users] = useCollection(db.collection("users"));
   const [toggle, setToggle] = useState(false);
   const directRoom = directRooms?.docs.find((doc) => {
     if (uid === userUid)
@@ -48,7 +47,7 @@ function SidebarOption({
       );
     return doc.data().uids.includes(userUid) && doc.data().uids.includes(uid);
   });
-  
+
   const usersHaveRead = directRoom?.data().usersHaveRead;
   const addNewDirect = async () => {
     if (!directRoom && uid && !loading) {
@@ -58,9 +57,14 @@ function SidebarOption({
           uids: [userUid, uid],
         })
         .then((doc) => {
-          db.collection("directRooms").doc(doc.id).update({
-            users: [users?.docs.find(doc => doc.data().uid === userUid)?.data(), users?.docs.find(doc => doc.data().uid === uid)?.data()]
-          })
+          db.collection("directRooms")
+            .doc(doc.id)
+            .update({
+              users: [
+                users?.docs.find((doc) => doc.data().uid === userUid)?.data(),
+                users?.docs.find((doc) => doc.data().uid === uid)?.data(),
+              ],
+            });
         });
       console.log("added!");
     }
@@ -87,7 +91,7 @@ function SidebarOption({
     }
   };
   const selectPerson = () => {
-    setToggle(true)
+    setToggle(true);
     dispatch(
       enterRoom({
         roomId: null,
@@ -101,7 +105,7 @@ function SidebarOption({
           directMessageRoomId: directRoom?.id,
         })
       );
-      dispatch(setSelectedUser({}));
+  
       db.collection("directRooms")
         .doc(directRoom.id)
         .update({
@@ -114,15 +118,10 @@ function SidebarOption({
   // Handle send message button
 
   useEffect(() => {
-    if(toggle)
-    addNewDirect();
-    if (!loading && directMessageUid === uid && directRoom?.id) {
-      selectPerson();
-      console.log("updated");
-    }
-    return() => {
-      setToggle(false)
-    }
+    if (toggle) addNewDirect();
+    return () => {
+      setToggle(false);
+    };
   }, [directMessageUid, directMessageRoomId, loading]);
 
   const defaultRoomId = "CcfrQCURBPLWpn6lj0k8";
@@ -130,21 +129,22 @@ function SidebarOption({
   const roomId = useSelector(selectRoomId);
   // Save moves
   let moves = useSelector(selectMoves);
-  const addMoves = (id) =>{
+  const addMoves = (id) => {
     let newMoves = moves?.filter((a) => {
       return a != id;
-    })
+    });
     newMoves.unshift(id);
-    dispatch(setMoves({
-      moves: newMoves
-    }))
-  }
+    dispatch(
+      setMoves({
+        moves: newMoves,
+      })
+    );
+  };
   useEffect(() => {
-    addMoves(roomId?roomId:directMessageRoomId)
-    
-  }, [roomId, directMessageUid])
+    addMoves(roomId ? roomId : directMessageRoomId);
+  }, [roomId, directMessageUid]);
 
-  // 
+  //
   if (members?.includes(user.uid) || isUser || id === defaultRoomId)
     return (
       <div

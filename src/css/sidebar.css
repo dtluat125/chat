@@ -19,7 +19,9 @@
 }
 
 /* Sidebar */
-
+.nav.side-bar-container {
+  display: block;
+}
 .side-bar-container {
   background: #3f0e40;
   padding: 0;
@@ -254,3 +256,21 @@ button.send-button:active {
   top: 50%;
   right: 0px;
 }
+/* collapse */
+.sidebar-collapse {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 204;
+  transition: transform 0.15s ease-in-out;
+  transform: translateX(-100%);
+}
+
+.sidebar-float{
+  transform: translateX(0);
+}
+
+.sidebar-toggle-button{
+  margin-left: 20px;
+}
+

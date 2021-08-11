@@ -16,6 +16,10 @@
     user-select: none;
 }
 
+.chat__header__left{
+    display: flex;
+}
+
 .chat__header__left__button{
     display: flex;
     align-items: center;
@@ -55,7 +59,7 @@
     position: absolute;
     bottom: -5px;
     right: -5px;
-    z-index: 999;
+    z-index: 200;
 }
 
 .chat__header__avatar .status.active{

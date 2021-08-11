@@ -9,7 +9,6 @@
     --saf-0: rgba(var(--sk_foreground_low,29,28,29),0.13);
     display: flex;
     flex-direction: column;
-    min-width: 200px;
     border-left: 1px solid var(--saf-0);
 }
 

@@ -5,7 +5,7 @@
     font-size: 15px;
 }
 
-.modal-dialog{
+.modal-dialog .chat-details-modal{
     max-width: 580px!important;
 }
 .c-modal__header{

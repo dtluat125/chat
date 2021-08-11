@@ -10,7 +10,7 @@ function SidebarCollapse(props){
     return(
         <div className="collapse-container">
             <div className="sidebar__option-container"
-            type="button" data-bs-toggle="collapse" data-bs-target={`#${props.id}`} aria-expanded="false" aria-controls={`${props.id}`}
+            type="button" data-bs-toggle="collapse" data-bs-target={`#${props.id}`} aria-expanded="true" aria-controls={`${props.id}`}
             onClick={showHandler}
             >
                 <div className={isShowing? props.title==="Channels"?"item-icon arrow-rotate":"item-icon":"item-icon"}>

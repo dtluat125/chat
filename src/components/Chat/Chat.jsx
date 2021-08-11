@@ -22,6 +22,7 @@ import Message from "./Message";
 import SmallLoader from "../SmallLoader";
 import DayBlockMessages from "./DayBlockMessages";
 import firebase from "firebase";
+import DehazeIcon from "@material-ui/icons/Dehaze";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -198,7 +199,11 @@ function Chat() {
       setJoin(false);
     };
   }, [join, roomLoading]);
-
+  // Toggler for sidebar
+  const openSidebar = () => {
+    let sidebarContainer = document.querySelector(".side-bar-container");
+    sidebarContainer?.classList.add("sidebar-float");
+  };
   return (
     <div className="chat-container">
       {loading || directLoading || usersLoading ? (
@@ -207,6 +212,14 @@ function Chat() {
         <>
           <div className="chat__header">
             <div className="chat__header__left">
+              <button
+                onClick={openSidebar}
+                className="sidebar-toggle-button c-button-unstyled chat__header__left__button"
+              >
+                <span>
+                  <DehazeIcon />
+                </span>
+              </button>
               {roomId ? (
                 <div
                   role="button"
@@ -246,18 +259,33 @@ function Chat() {
 
           <div className="chat-messages">
             <Message
-            userImage="https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg"
-            userName = {roomId?((roomDetails?.data()?.roomOwner?roomDetails?.data()?.roomOwner.displayName:"...") + ` founded the #${roomDetails?.data()?.name} channel,`):"This conversation is just between the two of you"}
-            message = {roomId?roomDetails?.data()?.des?roomDetails?.data()?.des:"":`Here you can send messages and share files with @${directUser?.data().displayName}.`}
-            description = {true}
+              userImage="https://icon-library.com/images/comment-bubble-icon-png/comment-bubble-icon-png-3.jpg"
+              userName={
+                roomId
+                  ? (roomDetails?.data()?.roomOwner
+                      ? roomDetails?.data()?.roomOwner.displayName
+                      : "...") +
+                    ` founded the #${roomDetails?.data()?.name} channel,`
+                  : "This conversation is just between the two of you"
+              }
+              message={
+                roomId
+                  ? roomDetails?.data()?.des
+                    ? roomDetails?.data()?.des
+                    : ""
+                  : `Here you can send messages and share files with @${
+                      directUser?.data().displayName
+                    }.`
+              }
+              description={true}
             />
             {blocksMessageArr?.map((doc) => {
               var time = doc[1].time;
               var timestamp = doc[1].timestamp;
-              var randomUid = (doc[1][0]?.props.uid);
+              var randomUid = doc[1][0]?.props.uid;
               return (
                 <DayBlockMessages
-                  uid = {randomUid}
+                  uid={randomUid}
                   loading={directLoading || loading}
                   key={time.date + time.month + time.year}
                   time={time}

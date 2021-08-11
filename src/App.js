@@ -61,7 +61,6 @@ function App() {
     setRisze(true)
     let prevX = e.clientX;
     let browserWidth = document.body.offsetWidth;
-    console.log(browserWidth)
     window.addEventListener('mousemove',mousemove);
     window.addEventListener('mouseup', mouseup);
     function mousemove (e) {
@@ -111,7 +110,7 @@ function App() {
 
   return (
     
-    <div className="App">
+    <div className="App" onresize>
         {/* <LogIn/> */}
         
 

@@ -122,17 +122,8 @@ function Header() {
             aria-labelledby="historyDropdown"
           >
             <div aria-hidden="true" className="c-menu_item__header">
-              Recent
+              This functionality is currently unavailable
             </div>
-            <Dropdown.Item className="dropdown-item" href="#">
-              Action
-            </Dropdown.Item>
-            <Dropdown.Item className="dropdown-item" href="#">
-              Another action
-            </Dropdown.Item>
-            <Dropdown.Item className="dropdown-item" href="#">
-              Something else here
-            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <div className="header__avatar">

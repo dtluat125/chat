@@ -52,6 +52,7 @@
     align-items: stretch;
     flex-grow: 1;
     height: calc(100% - 38px);
+    position: relative;
   }
 
   .App{
