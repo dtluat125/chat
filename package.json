@@ -2,6 +2,7 @@
   "name": "chat-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://dtluat125.github.io/chat-app-project",
   "dependencies": {
     "@material-ui/core": "^4.12.1",
     "@material-ui/icons": "^4.11.2",
@@ -25,13 +26,16 @@
     "web-vitals": "^1.1.2"
   },
   "devDependencies": {
+    "gh-pages": "^3.2.3",
     "react-firebase-hooks": "^3.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
