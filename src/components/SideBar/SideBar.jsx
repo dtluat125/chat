@@ -57,34 +57,50 @@ function SideBar({ width }) {
   let chatWidth;
   const isSecondaryWorkspaceOpen = useSelector(selectSecondaryWorkspaceStatus);
   useEffect(() => {
-    let chatContainer = document.querySelector(".chat-container");
-    let sidebarContainer = document.querySelector(".side-bar-container");
-    let sidebarToggler = document.querySelector(".sidebar-toggle-button.c-button-unstyled");
+    const chatContainer = document.querySelector(".chat-container");
+    const sidebarContainer = document.querySelector(".side-bar-container");
+    const sidebarToggler = document.querySelector(
+      ".sidebar-toggle-button.c-button-unstyled"
+    );
+
     const reportWindowSize = () => {
       windowWidth = window.innerWidth;
       chatWidth = chatContainer.offsetWidth;
-      if (windowWidth < 706 || chatWidth < 400) {
+      if ((windowWidth < 706&&windowWidth>=576)) {
         sidebarContainer?.classList.add("sidebar-collapse");
         sidebarToggler?.classList.remove("collapse");
-      } else {
-        sidebarContainer?.classList.remove("sidebar-collapse");
+        console.log("first condition");
+        chatContainer?.classList.remove("collapse");
+      } 
+      else if(windowWidth < 576&&isSecondaryWorkspaceOpen){
+        chatContainer?.classList.add("collapse")
+      }
+      else if(windowWidth < 576|| chatWidth < 400){
+        sidebarContainer?.classList.add("sidebar-collapse");
+        sidebarToggler?.classList.remove("collapse");
+        chatContainer?.classList.remove("collapse")
+      }
+      else {
+        chatContainer?.classList.remove("collapse")
         sidebarToggler?.classList.add("collapse");
+        sidebarContainer?.classList.remove("sidebar-collapse");
+        sidebarContainer?.classList.remove("sidebar-float");
       }
     };
-    console.log("dectect!");
-    window.addEventListener("resize", reportWindowSize);
     reportWindowSize();
-  }, [isSecondaryWorkspaceOpen]);
+    window.addEventListener("resize", reportWindowSize);
+  },);
 
   useEffect(() => {
-    let sidebarCollapse = document.querySelector(".sidebar-collapse");
-    let chatContainer = document.querySelector(".chat-container");
-    let secondaryWorkspace = document.querySelector(
+    const sidebarCollapse = document.querySelector(".sidebar-collapse");
+    const chatContainer = document.querySelector(".chat-container");
+    const secondaryWorkspace = document.querySelector(
       ".secondary-view-container"
     );
     const closeSidebar = () => {
       sidebarCollapse?.classList.remove("sidebar-float");
     };
+
     chatContainer?.addEventListener("click", closeSidebar);
     secondaryWorkspace?.addEventListener("click", closeSidebar);
   });

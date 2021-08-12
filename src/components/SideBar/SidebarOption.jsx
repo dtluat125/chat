@@ -118,7 +118,7 @@ function SidebarOption({
   // Handle send message button
 
   useEffect(() => {
-    if (toggle) addNewDirect();
+    addNewDirect();
     return () => {
       setToggle(false);
     };

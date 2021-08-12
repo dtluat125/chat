@@ -18,10 +18,11 @@ import SecondaryView from './components/SecondaryView';
 import ProfileModal from './components/Chat/ProfileModal';
 import EditChat from './components/Edit Chat/EditChat';
 import { useSelector } from 'react-redux';
-import { selectChosenUser, selectDirectMessageRoom, selectDirectUser, selectRoomDetails, selectRoomId } from './features/appSlice';
+import { selectChosenUser, selectDirectMessageRoom, selectDirectUser, selectRoomDetails, selectRoomId, selectUser } from './features/appSlice';
 import CreateChannel from './components/Edit Chat/CreateChannel';
 import RemoveAlertModal from './components/Edit Chat/RemoveAlertModal';
 import $ from "jquery"
+import InitAccount from './components/InitAccount/InitAccount';
 function App() {
   const [user, userLoading] = useAuthState(auth);
   // set status to Online
@@ -105,8 +106,9 @@ function App() {
     });
     
   }, [toggle])
-
-
+  // Get user info
+  const userInf = useSelector(selectUser);
+  
 
   return (
     
@@ -118,7 +120,9 @@ function App() {
           {
           userLoading?<Loading/>:
           (!user) ? (<LogIn/>):
-         (
+         (!(userInf?.displayName&&userInf?.photoURL)?(<InitAccount/>)
+         :<>
+         
          <>
           <CreateChannel/>
           <EditChat
@@ -143,7 +147,7 @@ function App() {
             <SecondaryView width = {profileWidth} resize = {resize}/>
           </div>
       
-
+          </>
           </>)
           }
 

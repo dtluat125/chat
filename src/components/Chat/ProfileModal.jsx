@@ -70,7 +70,7 @@ function ProfileModal({loading}) {
                         </div>
                     </div>
 
-                    <div className="profile-card__link" role="button" onClick={openSecondView} data-bs-dismiss="modal">
+                    <div className="profile-card__link" role="button" onClick={openSecondView} data-bs-dismiss="modal" data-bs-target=".editChat">
                         View full profile
                     </div>
 

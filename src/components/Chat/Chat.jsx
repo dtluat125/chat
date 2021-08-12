@@ -212,14 +212,14 @@ function Chat() {
         <>
           <div className="chat__header">
             <div className="chat__header__left">
-              <button
+              <div
                 onClick={openSidebar}
                 className="sidebar-toggle-button c-button-unstyled chat__header__left__button"
               >
                 <span>
                   <DehazeIcon />
                 </span>
-              </button>
+              </div>
               {roomId ? (
                 <div
                   role="button"

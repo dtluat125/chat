@@ -1,5 +1,8 @@
 /* Custom Button */
-
+.side-bar-container .dropdown-item {
+  padding-left: 10px !important;
+  font-size: 15px;
+}
 .c-button-unstyled {
   background: none !important;
   border: 0 !important;
@@ -106,6 +109,28 @@
   color: #350d36;
   margin-right: 0;
 }
+
+/* sidebar header dropdown */
+.side-bar-container .c-menu_item__header{
+  display: flex;
+  align-items: center;
+  padding: 4px 16px;
+}
+.server-logo{
+  width: 36px;
+  height: 36px;
+  background-color: rgb(235, 231, 231);
+  font-size: 1.5rem;
+  align-self: center;
+  text-align: center;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.general-dropdown .dropdown-item{
+  padding: 4px 16px!important;
+}
+
 /* Sidebar body */
 
 .side-bar-container .collapse-container {
@@ -143,10 +168,7 @@
   display: none !important;
 }
 
-.side-bar-container .dropdown-item {
-  padding-left: 10px !important;
-  font-size: 15px;
-}
+
 
 .item-container {
   display: flex;
@@ -274,3 +296,6 @@ button.send-button:active {
   margin-left: 20px;
 }
 
+.chat-collapse{
+  width: 0;
+}

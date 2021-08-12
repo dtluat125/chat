@@ -72,9 +72,8 @@ function Message({ userName, userImage, message, timestamp, uid, description }) 
         },
       })
     );
-  }, [userUid, loading]);
+  }, [loading, userUid, userInf]);
   const doNothing = () => {}
-  console.log("Name: " + userName)
   return (
     <div
       className={onHover ? "message-container active" : "message-container"}
